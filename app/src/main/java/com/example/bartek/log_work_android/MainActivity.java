@@ -30,34 +30,34 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void setButtonsListeners() {
-        Button addWorkingHoursButton = (Button) findViewById(R.id.addHoursButton);
-        addWorkingHoursButton.setOnClickListener(addWorkingHours());
+        Button addWorkedHoursButton = (Button) findViewById(R.id.addHoursButton);
+        addWorkedHoursButton.setOnClickListener(addHours());
 
-        Button displayWorkingHoursButton = (Button) findViewById(R.id.displayHoursButtonId);
-        displayWorkingHoursButton.setOnClickListener(displayWorkingHours());
+        Button displayWorkedHoursButton = (Button) findViewById(R.id.displayHoursButton);
+        displayWorkedHoursButton.setOnClickListener(displayHours());
     }
 
     @NonNull
-    private View.OnClickListener addWorkingHours() {
+    private View.OnClickListener addHours() {
         return new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                saveWorkingHours();
+                addWorkedHours();
             }
         };
     }
 
-    private void saveWorkingHours() {
-        int workingHours = Integer.parseInt(getWorkingHoursCount());
-        EditText workingHoursEditText = (EditText) findViewById(R.id.workingHoursEditText);
-        workingHours += Integer.parseInt(workingHoursEditText.getText().toString());
-        String FILENAME = "test.txt";
-        String string = Integer.toString(workingHours);
+    private void addWorkedHours() {
+        int workedHours = Integer.parseInt(getSumOfWorkedHours());
+        EditText sumOfWorkedHours = (EditText) findViewById(R.id.workedHoursEditText);
+        workedHours += Integer.parseInt(sumOfWorkedHours.getText().toString());
+        String filename = "test.txt";
+        String workedHoursToSave = Integer.toString(workedHours);
 
         try {
-            FileOutputStream fos = openFileOutput(FILENAME, Context.MODE_PRIVATE);
-            fos.write(string.getBytes());
-            fos.close();
+            FileOutputStream outputStream = openFileOutput(filename, Context.MODE_PRIVATE);
+            outputStream.write(workedHoursToSave.getBytes());
+            outputStream.close();
         } catch (FileNotFoundException e) {
             Log.e("FileNotFoundException", e.getMessage());
         } catch (IOException e) {
@@ -66,27 +66,27 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @NonNull
-    private View.OnClickListener displayWorkingHours() {
+    private View.OnClickListener displayHours() {
         return new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String message = "Hours worked: " + getWorkingHoursCount();
+                String message = "Hours worked: " + getSumOfWorkedHours();
                 makeText(context, message, LENGTH_LONG).show();
             }
         };
     }
 
-    private String getWorkingHoursCount() {
+    private String getSumOfWorkedHours() {
         try {
             FileInputStream fileInputStream = context.openFileInput("test.txt");
             InputStreamReader reader = new InputStreamReader(fileInputStream);
             BufferedReader bufferedReader = new BufferedReader(reader);
-            String workingHours = bufferedReader.readLine();
+            String sumOfWorkedHours = bufferedReader.readLine();
 
             fileInputStream.close();
             reader.close();
             bufferedReader.close();
-            return workingHours;
+            return sumOfWorkedHours;
         } catch (IOException e) {
             Log.e("IOException", e.getMessage());
         }

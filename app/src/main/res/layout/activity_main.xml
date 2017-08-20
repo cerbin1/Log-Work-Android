@@ -7,19 +7,19 @@
     tools:context="com.example.bartek.log_work_android.MainActivity">
 
     <EditText
-        android:id="@+id/workingHoursEditText"
+        android:id="@+id/workedHoursEditText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="8dp"
         android:layout_marginTop="8dp"
         android:ems="10"
-        android:hint="Add working hours"
+        android:hint="Worked hours"
         android:inputType="number"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
-        android:id="@+id/displayHoursButtonId"
+        android:id="@+id/displayHoursButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="8dp"
@@ -36,5 +36,5 @@
         android:layout_marginTop="7dp"
         android:text="Add working hours"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/workingHoursEditText" />
+        app:layout_constraintTop_toBottomOf="@+id/workedHoursEditText" />
 </android.support.constraint.ConstraintLayout>
