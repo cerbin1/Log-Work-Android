@@ -53,8 +53,8 @@ public class MainActivity extends AppCompatActivity {
 
     private void addWorkedHours() {
         double workedHours = getWorkedHoursOrZero();
-        EditText sumOfWorkedHours = (EditText) findViewById(R.id.workedHoursEditText);
-        workedHours += Double.parseDouble(sumOfWorkedHours.getText().toString());
+        String sumOfWorkedHours = ((EditText) findViewById(R.id.workedHoursEditText)).getText().toString();
+        workedHours += Double.parseDouble(sumOfWorkedHours);
         String workedHoursToSave = Double.toString(workedHours);
         String filename = "sum_of_worked_hours.txt";
 
