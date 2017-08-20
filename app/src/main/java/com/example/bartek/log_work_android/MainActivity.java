@@ -22,6 +22,8 @@ import static android.widget.Toast.makeText;
 public class MainActivity extends AppCompatActivity {
     private Context context = MainActivity.this;
 
+    private static final String TAG = "MainActivity";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -59,9 +61,9 @@ public class MainActivity extends AppCompatActivity {
             outputStream.write(workedHoursToSave.getBytes());
             outputStream.close();
         } catch (FileNotFoundException e) {
-            Log.e("FileNotFoundException", e.getMessage());
+            Log.e(TAG, "FileNotFoundException " + e.getMessage());
         } catch (IOException e) {
-            Log.e("IOException", e.getMessage());
+            Log.e(TAG, "IOException " + e.getMessage());
         }
     }
 
@@ -78,7 +80,7 @@ public class MainActivity extends AppCompatActivity {
 
     private String getSumOfWorkedHours() {
         try {
-            FileInputStream fileInputStream = context.openFileInput("sum_of_worked_hours.txt");
+            FileInputStream fileInputStream = context.openFileInput("sum_of_worked_hourss.txt");
             InputStreamReader reader = new InputStreamReader(fileInputStream);
             BufferedReader bufferedReader = new BufferedReader(reader);
             String sumOfWorkedHours = bufferedReader.readLine();
@@ -88,7 +90,7 @@ public class MainActivity extends AppCompatActivity {
             bufferedReader.close();
             return sumOfWorkedHours;
         } catch (IOException e) {
-            Log.e("IOException", e.getMessage());
+            Log.e(TAG, "IOException " + e.getMessage());
         }
         return "";
     }
