@@ -16,6 +16,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
+import utils.Formatter;
+
 import static android.widget.Toast.LENGTH_SHORT;
 import static android.widget.Toast.makeText;
 
@@ -92,7 +94,7 @@ public class MainActivity extends AppCompatActivity {
             fileInputStream.close();
             reader.close();
             bufferedReader.close();
-            return sumOfWorkedHours;
+            return Formatter.formatAsWorkedHours(sumOfWorkedHours);
         } catch (IOException e) {
             Log.e(TAG, "IOException " + e.getMessage());
             return "";
