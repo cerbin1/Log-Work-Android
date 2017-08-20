@@ -50,10 +50,10 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void addWorkedHours() {
-        int workedHours = getWorkedHoursOrZero();
+        double workedHours = getWorkedHoursOrZero();
         EditText sumOfWorkedHours = (EditText) findViewById(R.id.workedHoursEditText);
-        workedHours += Integer.parseInt(sumOfWorkedHours.getText().toString());
-        String workedHoursToSave = Integer.toString(workedHours);
+        workedHours += Double.parseDouble(sumOfWorkedHours.getText().toString());
+        String workedHoursToSave = Double.toString(workedHours);
         String filename = "sum_of_worked_hours.txt";
 
         try {
@@ -67,8 +67,8 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private int getWorkedHoursOrZero() {
-        return getSumOfWorkedHours().equals("") ? 0 : Integer.parseInt(getSumOfWorkedHours());
+    private double getWorkedHoursOrZero() {
+        return getSumOfWorkedHours().equals("") ? 0 : Double.parseDouble(getSumOfWorkedHours());
     }
 
     @NonNull
