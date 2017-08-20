@@ -59,9 +59,9 @@ public class MainActivity extends AppCompatActivity {
             fos.write(string.getBytes());
             fos.close();
         } catch (FileNotFoundException e) {
-            Log.d("FileNotFoundException", e.getMessage());
+            Log.e("FileNotFoundException", e.getMessage());
         } catch (IOException e) {
-            Log.d("IOException", e.getMessage());
+            Log.e("IOException", e.getMessage());
         }
     }
 
@@ -88,7 +88,7 @@ public class MainActivity extends AppCompatActivity {
             bufferedReader.close();
             return workingHours;
         } catch (IOException e) {
-            Log.d("IOException", e.getMessage());
+            Log.e("IOException", e.getMessage());
         }
         return "";
     }
