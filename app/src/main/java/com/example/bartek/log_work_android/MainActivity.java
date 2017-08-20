@@ -16,7 +16,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
-import static android.widget.Toast.LENGTH_LONG;
+import static android.widget.Toast.LENGTH_SHORT;
 import static android.widget.Toast.makeText;
 
 public class MainActivity extends AppCompatActivity {
@@ -73,7 +73,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 String message = "Hours worked: " + getSumOfWorkedHours();
-                makeText(context, message, LENGTH_LONG).show();
+                makeText(context, message, LENGTH_SHORT).show();
             }
         };
     }
