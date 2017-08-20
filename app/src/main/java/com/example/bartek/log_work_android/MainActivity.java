@@ -78,13 +78,13 @@ public class MainActivity extends AppCompatActivity {
 
     private String getWorkingHoursCount() {
         try {
-            FileInputStream fis = context.openFileInput("test.txt");
-            InputStreamReader isr = new InputStreamReader(fis);
-            BufferedReader bufferedReader = new BufferedReader(isr);
+            FileInputStream fileInputStream = context.openFileInput("test.txt");
+            InputStreamReader reader = new InputStreamReader(fileInputStream);
+            BufferedReader bufferedReader = new BufferedReader(reader);
             String workingHours = bufferedReader.readLine();
 
-            fis.close();
-            isr.close();
+            fileInputStream.close();
+            reader.close();
             bufferedReader.close();
             return workingHours;
         } catch (IOException e) {
