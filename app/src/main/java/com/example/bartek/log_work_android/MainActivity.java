@@ -53,8 +53,8 @@ public class MainActivity extends AppCompatActivity {
         int workedHours = Integer.parseInt(getSumOfWorkedHours());
         EditText sumOfWorkedHours = (EditText) findViewById(R.id.workedHoursEditText);
         workedHours += Integer.parseInt(sumOfWorkedHours.getText().toString());
-        String filename = "sum_of_worked_hours.txt";
         String workedHoursToSave = Integer.toString(workedHours);
+        String filename = "sum_of_worked_hours.txt";
 
         try {
             FileOutputStream outputStream = openFileOutput(filename, Context.MODE_PRIVATE);
@@ -80,7 +80,7 @@ public class MainActivity extends AppCompatActivity {
 
     private String getSumOfWorkedHours() {
         try {
-            FileInputStream fileInputStream = context.openFileInput("sum_of_worked_hourss.txt");
+            FileInputStream fileInputStream = context.openFileInput("sum_of_worked_hours.txt");
             InputStreamReader reader = new InputStreamReader(fileInputStream);
             BufferedReader bufferedReader = new BufferedReader(reader);
             String sumOfWorkedHours = bufferedReader.readLine();
