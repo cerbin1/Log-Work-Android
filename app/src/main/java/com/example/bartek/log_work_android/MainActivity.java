@@ -50,7 +50,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void addWorkedHours() {
-        int workedHours = Integer.parseInt(getSumOfWorkedHours());
+        int workedHours = getWorkedHoursOrZero();
         EditText sumOfWorkedHours = (EditText) findViewById(R.id.workedHoursEditText);
         workedHours += Integer.parseInt(sumOfWorkedHours.getText().toString());
         String workedHoursToSave = Integer.toString(workedHours);
@@ -65,6 +65,10 @@ public class MainActivity extends AppCompatActivity {
         } catch (IOException e) {
             Log.e(TAG, "IOException " + e.getMessage());
         }
+    }
+
+    private int getWorkedHoursOrZero() {
+        return getSumOfWorkedHours().equals("") ? 0 : Integer.parseInt(getSumOfWorkedHours());
     }
 
     @NonNull
@@ -91,7 +95,7 @@ public class MainActivity extends AppCompatActivity {
             return sumOfWorkedHours;
         } catch (IOException e) {
             Log.e(TAG, "IOException " + e.getMessage());
+            return "";
         }
-        return "";
     }
 }
