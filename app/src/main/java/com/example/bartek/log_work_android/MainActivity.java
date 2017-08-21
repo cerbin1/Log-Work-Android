@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import java.io.BufferedReader;
 import java.io.FileInputStream;
@@ -15,6 +16,8 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import utils.Formatter;
 
@@ -54,18 +57,25 @@ public class MainActivity extends AppCompatActivity {
     private void addWorkedHours() {
         double workedHours = getWorkedHoursOrZero();
         String sumOfWorkedHours = ((EditText) findViewById(R.id.workedHoursEditText)).getText().toString();
-        workedHours += Double.parseDouble(sumOfWorkedHours);
-        String workedHoursToSave = Double.toString(workedHours);
-        String filename = "sum_of_worked_hours.txt";
+        Pattern pattern = Pattern.compile("^[0-9]{1,3}([.][5])?$");
+        Matcher matcher = pattern.matcher(sumOfWorkedHours);
+        if (matcher.matches()) {
+            workedHours += Double.parseDouble(sumOfWorkedHours);
+            String workedHoursToSave = Double.toString(workedHours);
+            String filename = "sum_of_worked_hours.txt";
 
-        try {
-            FileOutputStream outputStream = openFileOutput(filename, Context.MODE_PRIVATE);
-            outputStream.write(workedHoursToSave.getBytes());
-            outputStream.close();
-        } catch (FileNotFoundException e) {
-            Log.e(TAG, "FileNotFoundException " + e.getMessage());
-        } catch (IOException e) {
-            Log.e(TAG, "IOException " + e.getMessage());
+            try {
+                FileOutputStream outputStream = openFileOutput(filename, Context.MODE_PRIVATE);
+                outputStream.write(workedHoursToSave.getBytes());
+                outputStream.close();
+            } catch (FileNotFoundException e) {
+                Log.e(TAG, "FileNotFoundException " + e.getMessage());
+            } catch (IOException e) {
+                Log.e(TAG, "IOException " + e.getMessage());
+            }
+        } else {
+            Toast toast = Formatter.getToastFormattedAsError(context, "Wrong input!", LENGTH_SHORT);
+            toast.show();
         }
     }
 
