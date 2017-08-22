@@ -23,9 +23,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="8dp"
-        android:text="Display Hours"
-        app:layout_constraintLeft_toLeftOf="parent"
         android:layout_marginTop="8dp"
+        android:text="Toast"
+        app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/addHoursButton" />
 
     <Button
@@ -45,7 +45,7 @@
         android:layout_marginLeft="8dp"
         android:layout_marginTop="8dp"
         android:onClick="startSecondActivity"
-        android:text="Button"
+        android:text="Display"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/displayHoursButton" />
 </android.support.constraint.ConstraintLayout>
