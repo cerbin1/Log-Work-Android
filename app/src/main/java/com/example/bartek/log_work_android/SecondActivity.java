@@ -1,8 +1,8 @@
 package com.example.bartek.log_work_android;
 
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.widget.Toast;
+import android.support.v7.app.AppCompatActivity;
+import android.widget.TextView;
 
 public class SecondActivity extends AppCompatActivity {
 
@@ -10,6 +10,7 @@ public class SecondActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.second_activity);
-        Toast.makeText(SecondActivity.this, getIntent().getExtras().getString("string"), Toast.LENGTH_LONG).show();
+        TextView workedHoursTextView = (TextView) findViewById(R.id.sumOfWorkedHours);
+        workedHoursTextView.setText(getIntent().getExtras().getString("string"));
     }
 }
