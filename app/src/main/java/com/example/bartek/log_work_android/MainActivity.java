@@ -37,7 +37,7 @@ public class MainActivity extends AppCompatActivity {
         setButtonsListeners();
     }
 
-    public void sendMessage(View view) {
+    public void startSecondActivity(View view) {
         Intent intent = new Intent(this, SecondActivity.class);
         intent.putExtra("string", getSumOfWorkedHours());
         startActivity(intent);
