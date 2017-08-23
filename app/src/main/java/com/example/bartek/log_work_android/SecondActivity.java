@@ -54,6 +54,7 @@ public class SecondActivity extends AppCompatActivity {
                             Log.e(TAG, "IOException " + e.getMessage());
                         }
                         sumOfWorkedHoursTextView.setText("0");
+                        sumOfWorkedHours = 0;
                     }
                 })
                 .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
