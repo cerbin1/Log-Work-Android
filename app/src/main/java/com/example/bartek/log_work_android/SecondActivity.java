@@ -65,7 +65,7 @@ public class SecondActivity extends AppCompatActivity {
                     public void onClick(DialogInterface dialog, int id) {
                         makeText(SecondActivity.this, "Deleted", LENGTH_SHORT).show();
                         try {
-                            clearSumOfWorkedHours();
+                            clearFiles();
                         } catch (FileNotFoundException e) {
                             Log.e(TAG, "FileNotFoundException " + e.getMessage());
                         } catch (IOException e) {
@@ -84,12 +84,20 @@ public class SecondActivity extends AppCompatActivity {
         alert.show();
     }
 
-    private void clearSumOfWorkedHours() throws IOException {
+    private void clearFiles() throws IOException {
+        clearSumOfWorkedHoursFile();
+        clearWorkHistoryFile();
+    }
+
+    private void clearWorkHistoryFile() throws IOException {
+        FileOutputStream outputStream = openFileOutput("work_history.txt", Context.MODE_PRIVATE);
+        outputStream.write("".getBytes());
+        outputStream.close();
+    }
+
+    private void clearSumOfWorkedHoursFile() throws IOException {
         FileOutputStream outputStream = openFileOutput("sum_of_worked_hours.txt", Context.MODE_PRIVATE);
         outputStream.write("0".getBytes());
-        outputStream.close();
-        outputStream = openFileOutput("work_history.txt", Context.MODE_PRIVATE);
-        outputStream.write("".getBytes());
         outputStream.close();
     }
 
