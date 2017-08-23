@@ -20,8 +20,9 @@ import static android.widget.Toast.LENGTH_SHORT;
 import static android.widget.Toast.makeText;
 
 public class SecondActivity extends AppCompatActivity {
-    private final double SALARY_PER_HOUR = 9.0;
+    private static final String TAG = "MainActivity";
 
+    private final double SALARY_PER_HOUR = 9.0;
     private TextView sumOfWorkedHoursTextView;
     private double sumOfWorkedHours;
 
@@ -46,9 +47,9 @@ public class SecondActivity extends AppCompatActivity {
                         try {
                             clearSumOfWorkedHours();
                         } catch (FileNotFoundException e) {
-                            Log.e("", "FileNotFoundException " + e.getMessage());
+                            Log.e(TAG, "FileNotFoundException " + e.getMessage());
                         } catch (IOException e) {
-                            Log.e("", "IOException " + e.getMessage());
+                            Log.e(TAG, "IOException " + e.getMessage());
                         }
                     }
                 })
