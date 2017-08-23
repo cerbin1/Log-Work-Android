@@ -1,5 +1,6 @@
 package utils;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -15,8 +16,12 @@ public class Formatter {
         return new DecimalFormat("#.#").format(Double.parseDouble(sumOfWorkedHours));
     }
 
+    public static String formatAsSalary(String salary) {
+        return new DecimalFormat("#.#").format(Double.parseDouble(salary));
+    }
+
     public static Toast getToastFormattedAsError(Context context, String string, int length) {
-        Toast toast = makeText(context, string, length);
+        @SuppressLint("ShowToast") Toast toast = makeText(context, string, length);
         toast.getView().setBackgroundColor(TRANSPARENT);
         TextView textView = toast.getView().findViewById(android.R.id.message);
         textView.setTextColor(RED);
