@@ -8,18 +8,15 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
-import utils.Formatter;
-
-import static android.widget.Toast.*;
+import static android.widget.Toast.LENGTH_LONG;
 import static android.widget.Toast.LENGTH_SHORT;
 import static android.widget.Toast.makeText;
-import static utils.Formatter.*;
+import static utils.Formatter.formatDouble;
 
 public class SecondActivity extends AppCompatActivity {
     private static final String TAG = "MainActivity";
