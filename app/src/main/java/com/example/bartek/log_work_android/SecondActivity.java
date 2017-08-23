@@ -9,9 +9,12 @@ import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
+import java.io.BufferedReader;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStreamReader;
 
 import static android.widget.Toast.LENGTH_LONG;
 import static android.widget.Toast.LENGTH_SHORT;
@@ -34,6 +37,24 @@ public class SecondActivity extends AppCompatActivity {
         sumOfWorkedHoursTextView = (TextView) findViewById(R.id.sumOfWorkedHours);
         sumOfWorkedHoursTextView.setText(sumOfWorkedHoursString);
         sumOfWorkedHours = Double.parseDouble(sumOfWorkedHoursString);
+
+        try {
+            FileInputStream fileInputStream = SecondActivity.this.openFileInput("work_history.txt");
+            InputStreamReader reader = new InputStreamReader(fileInputStream);
+            BufferedReader bufferedReader = new BufferedReader(reader);
+            StringBuilder text = new StringBuilder();
+            String line;
+            while ((line = bufferedReader.readLine()) != null) {
+                text.append("\n");
+                text.append(line);
+            }
+            ((TextView) findViewById(R.id.workHistory)).setText(text);
+            fileInputStream.close();
+            reader.close();
+            bufferedReader.close();
+        } catch (IOException e) {
+            Log.e(TAG, "IOException " + e.getMessage());
+        }
     }
 
     public void deleteSumOfWorkedHours(View view) {
@@ -66,6 +87,9 @@ public class SecondActivity extends AppCompatActivity {
     private void clearSumOfWorkedHours() throws IOException {
         FileOutputStream outputStream = openFileOutput("sum_of_worked_hours.txt", Context.MODE_PRIVATE);
         outputStream.write("0".getBytes());
+        outputStream.close();
+        outputStream = openFileOutput("work_history.txt", Context.MODE_PRIVATE);
+        outputStream.write("".getBytes());
         outputStream.close();
     }
 

@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
+import android.text.format.DateFormat;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -17,6 +18,8 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -80,9 +83,41 @@ public class MainActivity extends AppCompatActivity {
             } catch (IOException e) {
                 Log.e(TAG, "IOException " + e.getMessage());
             }
+
+            StringBuilder builder = new StringBuilder();
+            readWorkHistoryFromFile(builder);
+
+            try {
+                FileOutputStream outputStream = openFileOutput("work_history.txt", Context.MODE_PRIVATE);
+                Date currentTime = Calendar.getInstance().getTime();
+                outputStream.write((DateFormat.format("MMMM E d, yyyy ", currentTime.getTime()) + " [" + sumOfWorkedHours + "]" + "\n" + builder).getBytes());
+                outputStream.close();
+            } catch (FileNotFoundException e) {
+                Log.e(TAG, "FileNotFoundException " + e.getMessage());
+            } catch (IOException e) {
+                Log.e(TAG, "IOException " + e.getMessage());
+            }
         } else {
             Toast toast = Formatter.getToastFormattedAsError(context, "Wrong input!", LENGTH_SHORT);
             toast.show();
+        }
+    }
+
+    private void readWorkHistoryFromFile(StringBuilder text) {
+        try {
+            FileInputStream fileInputStream = MainActivity.this.openFileInput("work_history.txt");
+            InputStreamReader reader = new InputStreamReader(fileInputStream);
+            BufferedReader bufferedReader = new BufferedReader(reader);
+            String line;
+            while ((line = bufferedReader.readLine()) != null) {
+                text.append(line);
+                text.append("\n");
+            }
+            fileInputStream.close();
+            reader.close();
+            bufferedReader.close();
+        } catch (IOException e) {
+            Log.e(TAG, "IOException " + e.getMessage());
         }
     }
 
