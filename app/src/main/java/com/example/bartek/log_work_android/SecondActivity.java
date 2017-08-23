@@ -16,8 +16,10 @@ import java.io.IOException;
 
 import utils.Formatter;
 
+import static android.widget.Toast.*;
 import static android.widget.Toast.LENGTH_SHORT;
 import static android.widget.Toast.makeText;
+import static utils.Formatter.*;
 
 public class SecondActivity extends AppCompatActivity {
     private static final String TAG = "MainActivity";
@@ -51,6 +53,7 @@ public class SecondActivity extends AppCompatActivity {
                         } catch (IOException e) {
                             Log.e(TAG, "IOException " + e.getMessage());
                         }
+                        sumOfWorkedHoursTextView.setText("0");
                     }
                 })
                 .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
@@ -58,7 +61,6 @@ public class SecondActivity extends AppCompatActivity {
                         dialog.cancel();
                     }
                 });
-        sumOfWorkedHoursTextView.setText("0");
         AlertDialog alert = builder.create();
         alert.show();
     }
@@ -70,7 +72,7 @@ public class SecondActivity extends AppCompatActivity {
     }
 
     public void displaySalary(View view) {
-        makeText(SecondActivity.this, Formatter.formatDouble(getSalaryAsString()), Toast.LENGTH_LONG).show();
+        makeText(SecondActivity.this, formatDouble(getSalaryAsString()), LENGTH_LONG).show();
     }
 
     private String getSalaryAsString() {
