@@ -12,12 +12,8 @@ import static android.graphics.Color.TRANSPARENT;
 import static android.widget.Toast.makeText;
 
 public class Formatter {
-    public static String formatAsWorkedHours(String sumOfWorkedHours) {
-        return new DecimalFormat("#.#").format(Double.parseDouble(sumOfWorkedHours));
-    }
-
-    public static String formatAsSalary(String salary) {
-        return new DecimalFormat("#.#").format(Double.parseDouble(salary));
+    public static String formatDouble(String string) {
+        return new DecimalFormat("#.#").format(Double.parseDouble(string));
     }
 
     public static Toast getToastFormattedAsError(Context context, String string, int length) {

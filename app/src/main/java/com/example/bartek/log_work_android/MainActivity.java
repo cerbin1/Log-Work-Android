@@ -111,7 +111,7 @@ public class MainActivity extends AppCompatActivity {
             fileInputStream.close();
             reader.close();
             bufferedReader.close();
-            return Formatter.formatAsWorkedHours(sumOfWorkedHours);
+            return Formatter.formatDouble(sumOfWorkedHours);
         } catch (IOException e) {
             Log.e(TAG, "IOException " + e.getMessage());
             return "";

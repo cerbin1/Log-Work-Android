@@ -69,6 +69,6 @@ public class SecondActivity extends AppCompatActivity {
     }
 
     public void displaySalary(View view) {
-        makeText(SecondActivity.this, Formatter.formatAsSalary(Double.toString((sumOfWorkedHours * SALARY_PER_HOUR))), Toast.LENGTH_LONG).show();
+        makeText(SecondActivity.this, Formatter.formatDouble(Double.toString((sumOfWorkedHours * SALARY_PER_HOUR))), Toast.LENGTH_LONG).show();
     }
 }
