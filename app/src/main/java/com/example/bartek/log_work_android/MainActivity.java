@@ -90,7 +90,7 @@ public class MainActivity extends AppCompatActivity {
             try {
                 FileOutputStream outputStream = openFileOutput("work_history.txt", Context.MODE_PRIVATE);
                 Date currentTime = Calendar.getInstance().getTime();
-                outputStream.write((DateFormat.format("MMMM E d, yyyy ", currentTime.getTime()) + " [" + sumOfWorkedHours + "]" + "\n" + builder).getBytes());
+                outputStream.write((DateFormat.format("E, d MMMM, yyyy", currentTime.getTime()) + " [" + sumOfWorkedHours + "]" + "\n" + builder).getBytes());
                 outputStream.close();
             } catch (FileNotFoundException e) {
                 Log.e(TAG, "FileNotFoundException " + e.getMessage());
