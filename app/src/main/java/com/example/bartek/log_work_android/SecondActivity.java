@@ -73,6 +73,7 @@ public class SecondActivity extends AppCompatActivity {
                         }
                         sumOfWorkedHoursTextView.setText("0");
                         sumOfWorkedHours = 0;
+                        ((TextView) findViewById(R.id.workHistory)).setText("");
                     }
                 })
                 .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
