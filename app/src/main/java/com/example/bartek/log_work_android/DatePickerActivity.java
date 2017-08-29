@@ -59,7 +59,6 @@ public class DatePickerActivity extends AppCompatActivity {
             calendar.set(MONTH, month);
             calendar.set(YEAR, year);
 
-            Toast.makeText(DatePickerActivity.this, DateFormat.format("E, d MMMM, yyyy", calendar.getTimeInMillis()), Toast.LENGTH_LONG).show();
             Intent resultIntent = new Intent();
             resultIntent.putExtra("Date", calendar.getTimeInMillis());
             setResult(RESULT_OK, resultIntent);
