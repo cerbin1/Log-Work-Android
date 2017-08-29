@@ -1,6 +1,5 @@
 package com.example.bartek.log_work_android;
 
-import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.content.Intent;
@@ -13,28 +12,36 @@ import android.widget.Toast;
 import java.util.Calendar;
 
 import static android.app.DatePickerDialog.OnDateSetListener;
+import static java.util.Calendar.DAY_OF_MONTH;
+import static java.util.Calendar.MONTH;
+import static java.util.Calendar.YEAR;
+import static java.util.Calendar.getInstance;
 
 public class DatePickerActivity extends AppCompatActivity {
     private int year, month, day;
-    private static final int Dialog_ID = 0;
+    private static final int DATE_PICKER_DIALOG_ID = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_date_picker);
-        getPickedDate();
+        initializeDatePickerDialog();
     }
 
-    public void getPickedDate() {
-        final Calendar c = Calendar.getInstance();
-        year = c.get(Calendar.YEAR);
-        month = c.get(Calendar.MONTH);
-        day = c.get(Calendar.DAY_OF_MONTH);
-        showDialog(Dialog_ID);
+    public void initializeDatePickerDialog() {
+        setCurrentDateToDialog();
+        showDialog(DATE_PICKER_DIALOG_ID);
+    }
+
+    private void setCurrentDateToDialog() {
+        final Calendar calendar = getInstance();
+        year = calendar.get(YEAR);
+        month = calendar.get(MONTH);
+        day = calendar.get(DAY_OF_MONTH);
     }
 
     public Dialog onCreateDialog(int id) {
-        if (id == Dialog_ID) {
+        if (id == DATE_PICKER_DIALOG_ID) {
             return new DatePickerDialog(this, datePickerListener, year, month, day);
         }
         return null;
@@ -47,15 +54,15 @@ public class DatePickerActivity extends AppCompatActivity {
             month = m + 2;
             day = d;
 
-            Calendar calendar = Calendar.getInstance();
-            calendar.set(Calendar.DAY_OF_MONTH, day);
-            calendar.set(Calendar.MONTH, month - 1);
-            calendar.set(Calendar.YEAR, year);
+            final Calendar calendar = getInstance();
+            calendar.set(DAY_OF_MONTH, day);
+            calendar.set(MONTH, month - 1);
+            calendar.set(YEAR, year);
 
             Toast.makeText(DatePickerActivity.this, DateFormat.format("E, d MMMM, yyyy", calendar.getTimeInMillis()), Toast.LENGTH_LONG).show();
             Intent resultIntent = new Intent();
             resultIntent.putExtra("Date", calendar.getTimeInMillis());
-            setResult(Activity.RESULT_OK, resultIntent);
+            setResult(RESULT_OK, resultIntent);
             finish();
         }
     };
