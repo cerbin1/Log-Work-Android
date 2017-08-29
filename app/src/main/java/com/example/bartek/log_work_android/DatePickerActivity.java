@@ -51,12 +51,12 @@ public class DatePickerActivity extends AppCompatActivity {
         @Override
         public void onDateSet(DatePicker datePicker, int y, int m, int d) {
             year = y;
-            month = m + 2;
+            month = m;
             day = d;
 
             final Calendar calendar = getInstance();
             calendar.set(DAY_OF_MONTH, day);
-            calendar.set(MONTH, month - 1);
+            calendar.set(MONTH, month);
             calendar.set(YEAR, year);
 
             Toast.makeText(DatePickerActivity.this, DateFormat.format("E, d MMMM, yyyy", calendar.getTimeInMillis()), Toast.LENGTH_LONG).show();
