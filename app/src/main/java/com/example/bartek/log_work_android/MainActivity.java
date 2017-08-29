@@ -1,7 +1,6 @@
 package com.example.bartek.log_work_android;
 
-import android.app.DatePickerDialog;
-import android.app.Dialog;
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -12,7 +11,6 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
-import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -23,7 +21,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -35,10 +32,11 @@ import static android.widget.Toast.makeText;
 public class MainActivity extends AppCompatActivity {
     private Context context = MainActivity.this;
 
-    private int year, month, day;
-    private static final int Dialog_ID = 0;
+    private String sumOfWorkedHours;
 
     private static final String TAG = "MainActivity";
+
+    long dateInMillis;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,7 +71,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void addWorkedHours() {
         double workedHours = getWorkedHoursOrZero();
-        String sumOfWorkedHours = ((EditText) findViewById(R.id.workedHoursEditText)).getText().toString();
+        sumOfWorkedHours = ((EditText) findViewById(R.id.workedHoursEditText)).getText().toString();
         Pattern pattern = Pattern.compile("^[0-9]{1,3}([.][5])?$");
         Matcher matcher = pattern.matcher(sumOfWorkedHours);
         if (matcher.matches()) {
@@ -91,57 +89,54 @@ public class MainActivity extends AppCompatActivity {
                 Log.e(TAG, "IOException " + e.getMessage());
             }
 
-            StringBuilder builder = new StringBuilder();
-            readWorkHistoryFromFile(builder);
-
-            try {
-                FileOutputStream outputStream = openFileOutput("work_history.txt", Context.MODE_PRIVATE);
-                CheckBox editDate = (CheckBox) findViewById(R.id.setDate);
-                if (editDate.isChecked()) {
-                    final Calendar c = Calendar.getInstance();
-                    year = c.get(Calendar.YEAR);
-                    month = c.get(Calendar.MONTH);
-                    day = c.get(Calendar.DAY_OF_MONTH);
-                    showDialog(Dialog_ID);
-                    outputStream.write((DateFormat.format("E, d MMMM, yyyy", c.getTimeInMillis()) + " [" + sumOfWorkedHours + "]" + "\n" + builder).getBytes());
-                } else {
-                    Date currentTime = Calendar.getInstance().getTime();
-                    outputStream.write((DateFormat.format("E, d MMMM, yyyy", currentTime.getTime()) + " [" + sumOfWorkedHours + "]" + "\n" + builder).getBytes());
+            CheckBox setDate = (CheckBox) findViewById(R.id.setDate);
+            if (setDate.isChecked()) {
+                Intent intent = new Intent(this, DatePickerActivity.class);
+                startActivityForResult(intent, 10);
+            } else {
+                dateInMillis = getCurrentDate();
+                StringBuilder builder = new StringBuilder();
+                readWorkHistoryFromFile(builder);
+                try {
+                    FileOutputStream outputStream = openFileOutput("work_history.txt", Context.MODE_PRIVATE);
+                    outputStream.write((DateFormat.format("E, d MMMM, yyyy", dateInMillis) + " [" + sumOfWorkedHours + "]" + "\n" + builder).getBytes());
+                    outputStream.close();
+                } catch (FileNotFoundException e) {
+                    Log.e(TAG, "FileNotFoundException " + e.getMessage());
+                } catch (IOException e) {
+                    Log.e(TAG, "IOException " + e.getMessage());
                 }
-                outputStream.close();
-            } catch (FileNotFoundException e) {
-                Log.e(TAG, "FileNotFoundException " + e.getMessage());
-            } catch (IOException e) {
-                Log.e(TAG, "IOException " + e.getMessage());
             }
-        } else {
-            Toast toast = Formatter.getToastFormattedAsError(context, "Wrong input!", LENGTH_SHORT);
-            toast.show();
         }
     }
 
-    public Dialog onCreateDialog(int id) {
-        if (id == Dialog_ID) {
-            return new DatePickerDialog(this, datePickerListener, year, month, day);
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == 10) {
+            if (resultCode == Activity.RESULT_OK) {
+                dateInMillis = data.getLongExtra("Date", 10);
+
+                StringBuilder builder = new StringBuilder();
+                readWorkHistoryFromFile(builder);
+                try {
+                    FileOutputStream outputStream = openFileOutput("work_history.txt", Context.MODE_PRIVATE);
+                    outputStream.write((DateFormat.format("E, d MMMM, yyyy", dateInMillis) + " [" + sumOfWorkedHours + "]" + "\n" + builder).getBytes());
+                    outputStream.close();
+                } catch (FileNotFoundException e) {
+                    Log.e(TAG, "FileNotFoundException " + e.getMessage());
+                } catch (IOException e) {
+                    Log.e(TAG, "IOException " + e.getMessage());
+                }
+            } else {
+                Toast toast = Formatter.getToastFormattedAsError(context, "Wrong input!", LENGTH_SHORT);
+                toast.show();
+            }
         }
-        return null;
     }
 
-    private DatePickerDialog.OnDateSetListener datePickerListener = new DatePickerDialog.OnDateSetListener() {
-        @Override
-        public void onDateSet(DatePicker datePicker, int y, int m, int d) {
-            year = y;
-            month = m + 1;
-            day = d;
-
-            Calendar calendar = Calendar.getInstance();
-            calendar.set(Calendar.DAY_OF_MONTH, day);
-            calendar.set(Calendar.MONTH, month - 1);
-            calendar.set(Calendar.YEAR, year);
-
-            Toast.makeText(MainActivity.this, DateFormat.format("E, d MMMM, yyyy", calendar.getTimeInMillis()), Toast.LENGTH_LONG).show();
-        }
-    };
+    public long getCurrentDate() {
+        return Calendar.getInstance().getTime().getTime();
+    }
 
     private void readWorkHistoryFromFile(StringBuilder text) {
         try {
