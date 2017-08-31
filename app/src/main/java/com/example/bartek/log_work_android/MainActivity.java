@@ -19,10 +19,9 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.Calendar;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import utils.Formatter;
+import utils.PatternChecker;
 
 import static android.widget.Toast.LENGTH_SHORT;
 
@@ -48,9 +47,7 @@ public class MainActivity extends AppCompatActivity {
     public void addWorkedHours(View view) {
         double workedHours = getWorkedHoursOrZero();
         sumOfWorkedHours = ((EditText) findViewById(R.id.workedHoursEditText)).getText().toString();
-        Pattern pattern = Pattern.compile("^[0-9]{1,3}([.][5])?$");
-        Matcher matcher = pattern.matcher(sumOfWorkedHours);
-        if (matcher.matches()) {
+        if (PatternChecker.matches(sumOfWorkedHours)) {
             workedHours += Double.parseDouble(sumOfWorkedHours);
             String workedHoursToSave = Double.toString(workedHours);
             String filename = "sum_of_worked_hours.txt";
