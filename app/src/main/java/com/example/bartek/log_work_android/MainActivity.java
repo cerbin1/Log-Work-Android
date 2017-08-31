@@ -27,7 +27,6 @@ import java.util.regex.Pattern;
 import utils.Formatter;
 
 import static android.widget.Toast.LENGTH_SHORT;
-import static android.widget.Toast.makeText;
 
 public class MainActivity extends AppCompatActivity {
     private Context context = MainActivity.this;
@@ -54,9 +53,6 @@ public class MainActivity extends AppCompatActivity {
     private void setButtonsListeners() {
         Button addWorkedHoursButton = (Button) findViewById(R.id.addHoursButton);
         addWorkedHoursButton.setOnClickListener(addHours());
-
-        Button displayWorkedHoursButton = (Button) findViewById(R.id.displayHoursButton);
-        displayWorkedHoursButton.setOnClickListener(displayHours());
     }
 
     @NonNull
@@ -158,17 +154,6 @@ public class MainActivity extends AppCompatActivity {
 
     private double getWorkedHoursOrZero() {
         return getSumOfWorkedHours().equals("") ? 0 : Double.parseDouble(getSumOfWorkedHours());
-    }
-
-    @NonNull
-    private View.OnClickListener displayHours() {
-        return new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                String message = "Hours worked: " + getSumOfWorkedHours();
-                makeText(context, message, LENGTH_SHORT).show();
-            }
-        };
     }
 
     private String getSumOfWorkedHours() {
