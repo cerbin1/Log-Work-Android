@@ -29,12 +29,10 @@ import utils.Formatter;
 import static android.widget.Toast.LENGTH_SHORT;
 
 public class MainActivity extends AppCompatActivity {
-    private final Context context = MainActivity.this;
+    private static final String TAG = "MainActivity";
+    private final Context CONTEXT = MainActivity.this;
 
     private String sumOfWorkedHours;
-
-    private static final String TAG = "MainActivity";
-
     long dateInMillis;
 
     @Override
@@ -45,7 +43,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void startSecondActivity(View view) {
-        Intent intent = new Intent(this, SecondActivity.class);
+        Intent intent = new Intent(CONTEXT, SecondActivity.class);
         intent.putExtra("string", getSumOfWorkedHours());
         startActivity(intent);
     }
@@ -87,7 +85,7 @@ public class MainActivity extends AppCompatActivity {
 
             CheckBox setDate = (CheckBox) findViewById(R.id.setDate);
             if (setDate.isChecked()) {
-                Intent intent = new Intent(this, DatePickerActivity.class);
+                Intent intent = new Intent(CONTEXT, DatePickerActivity.class);
                 startActivityForResult(intent, 10);
             } else {
                 dateInMillis = getCurrentDate();
@@ -104,7 +102,7 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         } else {
-            Toast toast = Formatter.getToastFormattedAsError(context, "Wrong input!", LENGTH_SHORT);
+            Toast toast = Formatter.getToastFormattedAsError(CONTEXT, "Wrong input!", LENGTH_SHORT);
             toast.show();
         }
     }
@@ -136,7 +134,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void readWorkHistoryFromFile(StringBuilder text) {
         try {
-            FileInputStream fileInputStream = MainActivity.this.openFileInput("work_history.txt");
+            FileInputStream fileInputStream = CONTEXT.openFileInput("work_history.txt");
             InputStreamReader reader = new InputStreamReader(fileInputStream);
             BufferedReader bufferedReader = new BufferedReader(reader);
             String line;
@@ -158,7 +156,7 @@ public class MainActivity extends AppCompatActivity {
 
     private String getSumOfWorkedHours() {
         try {
-            FileInputStream fileInputStream = context.openFileInput("sum_of_worked_hours.txt");
+            FileInputStream fileInputStream = CONTEXT.openFileInput("sum_of_worked_hours.txt");
             InputStreamReader reader = new InputStreamReader(fileInputStream);
             BufferedReader bufferedReader = new BufferedReader(reader);
             String sumOfWorkedHours = bufferedReader.readLine();

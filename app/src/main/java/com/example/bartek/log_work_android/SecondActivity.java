@@ -23,6 +23,7 @@ import static utils.Formatter.formatDouble;
 
 public class SecondActivity extends AppCompatActivity {
     private static final String TAG = "MainActivity";
+    private final SecondActivity CONTEXT = SecondActivity.this;
 
     private static final double SALARY_PER_HOUR = 9.0;
     private TextView sumOfWorkedHoursTextView;
@@ -39,7 +40,7 @@ public class SecondActivity extends AppCompatActivity {
         sumOfWorkedHours = Double.parseDouble(sumOfWorkedHoursString);
 
         try {
-            FileInputStream fileInputStream = SecondActivity.this.openFileInput("work_history.txt");
+            FileInputStream fileInputStream = CONTEXT.openFileInput("work_history.txt");
             InputStreamReader reader = new InputStreamReader(fileInputStream);
             BufferedReader bufferedReader = new BufferedReader(reader);
             StringBuilder text = new StringBuilder();
@@ -63,7 +64,7 @@ public class SecondActivity extends AppCompatActivity {
                 .setCancelable(false)
                 .setPositiveButton("Delete", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        makeText(SecondActivity.this, "Deleted", LENGTH_SHORT).show();
+                        makeText(CONTEXT, "Deleted", LENGTH_SHORT).show();
                         try {
                             clearFiles();
                         } catch (FileNotFoundException e) {
@@ -103,7 +104,7 @@ public class SecondActivity extends AppCompatActivity {
     }
 
     public void displaySalary(View view) {
-        makeText(SecondActivity.this, formatDouble(getSalaryAsString()), LENGTH_LONG).show();
+        makeText(CONTEXT, formatDouble(getSalaryAsString()), LENGTH_LONG).show();
     }
 
     private String getSalaryAsString() {
