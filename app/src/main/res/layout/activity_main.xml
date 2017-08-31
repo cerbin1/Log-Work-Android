@@ -24,6 +24,7 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="8dp"
         android:layout_marginTop="7dp"
+        android:onClick="addWorkedHours"
         android:text="Add working hours"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/workedHoursEditText" />

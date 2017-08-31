@@ -4,12 +4,10 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.text.format.DateFormat;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -39,7 +37,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        setButtonsListeners();
     }
 
     public void startSecondActivity(View view) {
@@ -48,22 +45,7 @@ public class MainActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-    private void setButtonsListeners() {
-        Button addWorkedHoursButton = (Button) findViewById(R.id.addHoursButton);
-        addWorkedHoursButton.setOnClickListener(addHours());
-    }
-
-    @NonNull
-    private View.OnClickListener addHours() {
-        return new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                addWorkedHours();
-            }
-        };
-    }
-
-    private void addWorkedHours() {
+    public void addWorkedHours(View view) {
         double workedHours = getWorkedHoursOrZero();
         sumOfWorkedHours = ((EditText) findViewById(R.id.workedHoursEditText)).getText().toString();
         Pattern pattern = Pattern.compile("^[0-9]{1,3}([.][5])?$");
