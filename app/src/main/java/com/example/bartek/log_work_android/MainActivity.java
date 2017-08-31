@@ -39,7 +39,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void startSecondActivity(View view) {
         Intent intent = new Intent(CONTEXT, SecondActivity.class);
-        intent.putExtra("string", getSumOfWorkedHours());
+        intent.putExtra("sumOfWorkedHours", getSumOfWorkedHours());
         startActivity(intent);
     }
 

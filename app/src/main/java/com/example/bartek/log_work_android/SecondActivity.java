@@ -36,7 +36,7 @@ public class SecondActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.second_activity);
 
-        String sumOfWorkedHoursString = getIntent().getExtras().getString("string");
+        String sumOfWorkedHoursString = getIntent().getExtras().getString("sumOfWorkedHours");
         sumOfWorkedHoursTextView = (TextView) findViewById(R.id.sumOfWorkedHours);
         sumOfWorkedHoursTextView.setText(sumOfWorkedHoursString);
         sumOfWorkedHours = parseDouble(sumOfWorkedHoursString);
