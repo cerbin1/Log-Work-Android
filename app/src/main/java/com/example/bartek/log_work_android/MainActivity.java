@@ -29,7 +29,7 @@ import utils.Formatter;
 import static android.widget.Toast.LENGTH_SHORT;
 
 public class MainActivity extends AppCompatActivity {
-    private Context context = MainActivity.this;
+    private final Context context = MainActivity.this;
 
     private String sumOfWorkedHours;
 

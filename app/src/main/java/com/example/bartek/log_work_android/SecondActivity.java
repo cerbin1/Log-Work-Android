@@ -24,7 +24,7 @@ import static utils.Formatter.formatDouble;
 public class SecondActivity extends AppCompatActivity {
     private static final String TAG = "MainActivity";
 
-    private final double SALARY_PER_HOUR = 9.0;
+    private static final double SALARY_PER_HOUR = 9.0;
     private TextView sumOfWorkedHoursTextView;
     private double sumOfWorkedHours;
 
