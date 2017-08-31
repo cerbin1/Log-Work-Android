@@ -107,6 +107,9 @@ public class MainActivity extends AppCompatActivity {
                     Log.e(TAG, "IOException " + e.getMessage());
                 }
             }
+        } else {
+            Toast toast = Formatter.getToastFormattedAsError(context, "Wrong input!", LENGTH_SHORT);
+            toast.show();
         }
     }
 
@@ -127,9 +130,6 @@ public class MainActivity extends AppCompatActivity {
                 } catch (IOException e) {
                     Log.e(TAG, "IOException " + e.getMessage());
                 }
-            } else {
-                Toast toast = Formatter.getToastFormattedAsError(context, "Wrong input!", LENGTH_SHORT);
-                toast.show();
             }
         }
     }
