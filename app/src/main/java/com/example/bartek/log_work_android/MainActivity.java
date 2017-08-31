@@ -1,6 +1,5 @@
 package com.example.bartek.log_work_android;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -10,7 +9,6 @@ import android.util.Log;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.EditText;
-import android.widget.Toast;
 
 import java.io.BufferedReader;
 import java.io.FileInputStream;
@@ -20,10 +18,11 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.Calendar;
 
-import utils.Formatter;
 import utils.PatternChecker;
 
 import static android.widget.Toast.LENGTH_SHORT;
+import static utils.Formatter.formatDouble;
+import static utils.Formatter.getToastFormattedAsError;
 
 public class MainActivity extends AppCompatActivity {
     private static final String TAG = "MainActivity";
@@ -45,14 +44,13 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void addWorkedHours(View view) {
-        double workedHours = getWorkedHoursOrZero();
         sumOfWorkedHours = ((EditText) findViewById(R.id.workedHoursEditText)).getText().toString();
         if (PatternChecker.matches(sumOfWorkedHours)) {
+            double workedHours = getWorkedHoursOrZero();
             workedHours += Double.parseDouble(sumOfWorkedHours);
             String workedHoursToSave = Double.toString(workedHours);
-            String filename = "sum_of_worked_hours.txt";
-
             try {
+                String filename = "sum_of_worked_hours.txt";
                 FileOutputStream outputStream = openFileOutput(filename, Context.MODE_PRIVATE);
                 outputStream.write(workedHoursToSave.getBytes());
                 outputStream.close();
@@ -81,15 +79,18 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         } else {
-            Toast toast = Formatter.getToastFormattedAsError(CONTEXT, "Wrong input!", LENGTH_SHORT);
-            toast.show();
+            getToastFormattedAsError(CONTEXT, "Wrong input!", LENGTH_SHORT).show();
         }
+    }
+
+    private double getWorkedHoursOrZero() {
+        return getSumOfWorkedHours().equals("") ? 0 : Double.parseDouble(getSumOfWorkedHours());
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == 10) {
-            if (resultCode == Activity.RESULT_OK) {
+            if (resultCode == RESULT_OK) {
                 dateInMillis = data.getLongExtra("Date", 10);
 
                 StringBuilder builder = new StringBuilder();
@@ -129,10 +130,6 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private double getWorkedHoursOrZero() {
-        return getSumOfWorkedHours().equals("") ? 0 : Double.parseDouble(getSumOfWorkedHours());
-    }
-
     private String getSumOfWorkedHours() {
         try {
             FileInputStream fileInputStream = CONTEXT.openFileInput("sum_of_worked_hours.txt");
@@ -143,7 +140,7 @@ public class MainActivity extends AppCompatActivity {
             fileInputStream.close();
             reader.close();
             bufferedReader.close();
-            return Formatter.formatDouble(sumOfWorkedHours);
+            return formatDouble(sumOfWorkedHours);
         } catch (IOException e) {
             Log.e(TAG, "IOException " + e.getMessage());
             return "";

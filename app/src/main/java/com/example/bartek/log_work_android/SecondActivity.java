@@ -16,9 +16,11 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
+import static android.app.AlertDialog.*;
 import static android.widget.Toast.LENGTH_LONG;
 import static android.widget.Toast.LENGTH_SHORT;
 import static android.widget.Toast.makeText;
+import static java.lang.Double.*;
 import static utils.Formatter.formatDouble;
 
 public class SecondActivity extends AppCompatActivity {
@@ -37,7 +39,7 @@ public class SecondActivity extends AppCompatActivity {
         String sumOfWorkedHoursString = getIntent().getExtras().getString("string");
         sumOfWorkedHoursTextView = (TextView) findViewById(R.id.sumOfWorkedHours);
         sumOfWorkedHoursTextView.setText(sumOfWorkedHoursString);
-        sumOfWorkedHours = Double.parseDouble(sumOfWorkedHoursString);
+        sumOfWorkedHours = parseDouble(sumOfWorkedHoursString);
 
         try {
             FileInputStream fileInputStream = CONTEXT.openFileInput("work_history.txt");
@@ -59,7 +61,7 @@ public class SecondActivity extends AppCompatActivity {
     }
 
     public void deleteSumOfWorkedHours(View view) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        Builder builder = new Builder(this);
         builder.setMessage("Are you sure you want to delete sum of worked hours?")
                 .setCancelable(false)
                 .setPositiveButton("Delete", new DialogInterface.OnClickListener() {
