@@ -28,31 +28,32 @@ public class MainActivity extends AppCompatActivity {
     private static final String TAG = "MainActivity";
     private final Context CONTEXT = MainActivity.this;
 
-    private String sumOfWorkedHours;
+    private String input;
     long dateInMillis;
+
+    private double sumOfWorkedHours;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        sumOfWorkedHours = getSumOfWorkedHours();
     }
 
     public void startSecondActivity(View view) {
         Intent intent = new Intent(CONTEXT, SecondActivity.class);
-        intent.putExtra("sumOfWorkedHours", getSumOfWorkedHours());
+        intent.putExtra("sumOfWorkedHours", sumOfWorkedHours);
         startActivity(intent);
     }
 
-    public void addWorkedHours(View view) {
-        sumOfWorkedHours = ((EditText) findViewById(R.id.workedHoursEditText)).getText().toString();
-        if (PatternChecker.matches(sumOfWorkedHours)) {
-            double workedHours = getWorkedHoursOrZero();
-            workedHours += Double.parseDouble(sumOfWorkedHours);
-            String workedHoursToSave = Double.toString(workedHours);
+    public void submitWorkedHours(View view) {
+        input = ((EditText) findViewById(R.id.workedHoursEditText)).getText().toString();
+        if (PatternChecker.matches(input)) {
+            double workedHoursToSave = sumOfWorkedHours + Double.parseDouble(input);
             try {
                 String filename = "sum_of_worked_hours.txt";
                 FileOutputStream outputStream = openFileOutput(filename, Context.MODE_PRIVATE);
-                outputStream.write(workedHoursToSave.getBytes());
+                outputStream.write(Double.toString(workedHoursToSave).getBytes());
                 outputStream.close();
             } catch (FileNotFoundException e) {
                 Log.e(TAG, "FileNotFoundException " + e.getMessage());
@@ -70,7 +71,7 @@ public class MainActivity extends AppCompatActivity {
                 readWorkHistoryFromFile(builder);
                 try {
                     FileOutputStream outputStream = openFileOutput("work_history.txt", Context.MODE_PRIVATE);
-                    outputStream.write((DateFormat.format("E, d MMMM, yyyy", dateInMillis) + " [" + sumOfWorkedHours + "]" + "\n" + builder).getBytes());
+                    outputStream.write((DateFormat.format("E, d MMMM, yyyy", dateInMillis) + " [" + input + "]" + "\n" + builder).getBytes());
                     outputStream.close();
                 } catch (FileNotFoundException e) {
                     Log.e(TAG, "FileNotFoundException " + e.getMessage());
@@ -83,8 +84,9 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private double getWorkedHoursOrZero() {
-        return getSumOfWorkedHours().equals("") ? 0 : Double.parseDouble(getSumOfWorkedHours());
+    private double getSumOfWorkedHours() {
+        String string = getSumOfWorkedHoursFromFile();
+        return string.equals("") ? 0 : Double.parseDouble(string);
     }
 
     @Override
@@ -97,7 +99,7 @@ public class MainActivity extends AppCompatActivity {
                 readWorkHistoryFromFile(builder);
                 try {
                     FileOutputStream outputStream = openFileOutput("work_history.txt", Context.MODE_PRIVATE);
-                    outputStream.write((DateFormat.format("E, d MMMM, yyyy", dateInMillis) + " [" + sumOfWorkedHours + "]" + "\n" + builder).getBytes());
+                    outputStream.write((DateFormat.format("E, d MMMM, yyyy", dateInMillis) + " [" + input + "]" + "\n" + builder).getBytes());
                     outputStream.close();
                 } catch (FileNotFoundException e) {
                     Log.e(TAG, "FileNotFoundException " + e.getMessage());
@@ -130,7 +132,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private String getSumOfWorkedHours() {
+    private String getSumOfWorkedHoursFromFile() {
         try {
             FileInputStream fileInputStream = CONTEXT.openFileInput("sum_of_worked_hours.txt");
             InputStreamReader reader = new InputStreamReader(fileInputStream);
