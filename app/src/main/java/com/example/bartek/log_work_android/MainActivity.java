@@ -98,8 +98,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private double getSumOfWorkedHours() {
-        String sumOfWorkedHours = getSumOfWorkedHoursFromFile();
-        return sumOfWorkedHours.equals("") ? 0 : Double.parseDouble(sumOfWorkedHours);
+        return Double.parseDouble(getSumOfWorkedHoursFromFile());
     }
 
     @Override
@@ -155,7 +154,7 @@ public class MainActivity extends AppCompatActivity {
             fileInputStream.close();
             reader.close();
             bufferedReader.close();
-            return formatDouble(sumOfWorkedHours);
+            return sumOfWorkedHours == null ? "0" : formatDouble(sumOfWorkedHours);
         } catch (IOException e) {
             Log.e(TAG, "IOException " + e.getMessage());
             return "";
