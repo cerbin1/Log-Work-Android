@@ -16,19 +16,20 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
-import static android.app.AlertDialog.*;
+import static android.app.AlertDialog.Builder;
 import static android.widget.Toast.LENGTH_LONG;
 import static android.widget.Toast.LENGTH_SHORT;
 import static android.widget.Toast.makeText;
-import static java.lang.Double.*;
+import static java.lang.Double.parseDouble;
 import static utils.Formatter.formatDouble;
 
 public class SecondActivity extends AppCompatActivity {
     private static final String TAG = "MainActivity";
+    private static final double SALARY_PER_HOUR = 9.0;
     private final SecondActivity CONTEXT = SecondActivity.this;
 
-    private static final double SALARY_PER_HOUR = 9.0;
     private TextView sumOfWorkedHoursTextView;
+    private TextView workHistoryTextView;
     private double sumOfWorkedHours;
 
     @Override
@@ -36,28 +37,42 @@ public class SecondActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.second_activity);
 
-        String sumOfWorkedHoursString = getIntent().getExtras().getString("sumOfWorkedHours");
+        String sumOfWorkedHoursString = getSumOfWorkedHoursFromExtras();
         sumOfWorkedHoursTextView = (TextView) findViewById(R.id.sumOfWorkedHours);
         sumOfWorkedHoursTextView.setText(sumOfWorkedHoursString);
         sumOfWorkedHours = parseDouble(sumOfWorkedHoursString);
+        workHistoryTextView = (TextView) findViewById(R.id.workHistory);
 
+        workHistoryTextView.setText(displayWorkHistory());
+    }
+
+    private String displayWorkHistory() {
         try {
-            FileInputStream fileInputStream = CONTEXT.openFileInput("work_history.txt");
-            InputStreamReader reader = new InputStreamReader(fileInputStream);
-            BufferedReader bufferedReader = new BufferedReader(reader);
-            StringBuilder text = new StringBuilder();
-            String line;
-            while ((line = bufferedReader.readLine()) != null) {
-                text.append("\n");
-                text.append(line);
-            }
-            ((TextView) findViewById(R.id.workHistory)).setText(text);
-            fileInputStream.close();
-            reader.close();
-            bufferedReader.close();
+            return getWorkHistoryFromFile();
         } catch (IOException e) {
             Log.e(TAG, "IOException " + e.getMessage());
+            return "";
         }
+    }
+
+    private String getWorkHistoryFromFile() throws IOException {
+        FileInputStream fileInputStream = CONTEXT.openFileInput("work_history.txt");
+        InputStreamReader reader = new InputStreamReader(fileInputStream);
+        BufferedReader bufferedReader = new BufferedReader(reader);
+        StringBuilder workHistory = new StringBuilder();
+        String line;
+        while ((line = bufferedReader.readLine()) != null) {
+            workHistory.append("\n");
+            workHistory.append(line);
+        }
+        fileInputStream.close();
+        reader.close();
+        bufferedReader.close();
+        return workHistory.toString();
+    }
+
+    private String getSumOfWorkedHoursFromExtras() {
+        return getIntent().getExtras().getString("sumOfWorkedHours");
     }
 
     public void deleteSumOfWorkedHours(View view) {
@@ -74,9 +89,7 @@ public class SecondActivity extends AppCompatActivity {
                         } catch (IOException e) {
                             Log.e(TAG, "IOException " + e.getMessage());
                         }
-                        sumOfWorkedHoursTextView.setText("0");
-                        sumOfWorkedHours = 0;
-                        ((TextView) findViewById(R.id.workHistory)).setText("");
+                        resetTextViewsAndFields();
                     }
                 })
                 .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
@@ -86,6 +99,12 @@ public class SecondActivity extends AppCompatActivity {
                 });
         AlertDialog alert = builder.create();
         alert.show();
+    }
+
+    private void resetTextViewsAndFields() {
+        sumOfWorkedHoursTextView.setText("0");
+        workHistoryTextView.setText("");
+        sumOfWorkedHours = 0;
     }
 
     private void clearFiles() throws IOException {
