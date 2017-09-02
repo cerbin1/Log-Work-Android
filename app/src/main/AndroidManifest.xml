@@ -30,8 +30,7 @@
         <activity
             android:name=".DatePickerActivity"
             android:parentActivityName=".MainActivity"
-            tools:targetApi="jelly_bean">
-        </activity>
+            tools:targetApi="jelly_bean"></activity>
     </application>
 
 </manifest>

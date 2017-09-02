@@ -58,7 +58,6 @@ public class SecondActivity extends AppCompatActivity {
 
     @NonNull
     private String getWorkHistoryFromFile() throws IOException {
-        System.out.println(CONTEXT);
         FileInputStream fileInputStream = CONTEXT.openFileInput("work_history.txt");
         InputStreamReader reader = new InputStreamReader(fileInputStream);
         BufferedReader bufferedReader = new BufferedReader(reader);
