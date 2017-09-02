@@ -85,9 +85,10 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void saveSumOfWorkedHoursToFile() {
+        String sumOfWorkedHoursToSave = formatDouble(Double.toString(getSumOfWorkedHours() + workedHours));
         try {
             FileOutputStream outputStream = openFileOutput("sum_of_worked_hours.txt", Context.MODE_PRIVATE);
-            outputStream.write(formatDouble(Double.toString(getSumOfWorkedHours() + workedHours)).getBytes());
+            outputStream.write(sumOfWorkedHoursToSave.getBytes());
             outputStream.close();
         } catch (FileNotFoundException e) {
             Log.e(TAG, "FileNotFoundException " + e.getMessage());
@@ -150,8 +151,6 @@ public class MainActivity extends AppCompatActivity {
             InputStreamReader reader = new InputStreamReader(fileInputStream);
             BufferedReader bufferedReader = new BufferedReader(reader);
             String sumOfWorkedHours = bufferedReader.readLine();
-
-            if (sumOfWorkedHours == null) return "";
 
             fileInputStream.close();
             reader.close();
