@@ -3,6 +3,7 @@ package com.example.bartek.log_work_android;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -45,6 +46,7 @@ public class SecondActivity extends AppCompatActivity {
         workHistoryTextView.setText(getWorkHistory());
     }
 
+    @NonNull
     private String getWorkHistory() {
         try {
             return getWorkHistoryFromFile();
@@ -54,6 +56,7 @@ public class SecondActivity extends AppCompatActivity {
         }
     }
 
+    @NonNull
     private String getWorkHistoryFromFile() throws IOException {
         System.out.println(CONTEXT);
         FileInputStream fileInputStream = CONTEXT.openFileInput("work_history.txt");
