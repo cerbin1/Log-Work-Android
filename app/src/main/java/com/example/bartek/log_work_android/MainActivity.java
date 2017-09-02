@@ -26,80 +26,92 @@ import static utils.Formatter.getToastFormattedAsError;
 
 public class MainActivity extends AppCompatActivity {
     private static final String TAG = "MainActivity";
+    private static final int DATE_PICKER_REQUEST_CODE = 10;
     private final Context CONTEXT = MainActivity.this;
 
-    private String input;
+    private double workedHours;
     long dateInMillis;
-
-    private double sumOfWorkedHours;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        sumOfWorkedHours = getSumOfWorkedHours();
     }
 
     public void startSecondActivity(View view) {
         Intent intent = new Intent(CONTEXT, SecondActivity.class);
-        intent.putExtra("sumOfWorkedHours", formatDouble(Double.toString(sumOfWorkedHours)));
+        intent.putExtra("sumOfWorkedHours", formatDouble(getSumOfWorkedHoursFromFile()));
         startActivity(intent);
     }
 
     public void submitWorkedHours(View view) {
-        input = ((EditText) findViewById(R.id.workedHoursEditText)).getText().toString();
+        String input = ((EditText) findViewById(R.id.workedHoursEditText)).getText().toString();
         if (PatternChecker.matches(input)) {
-            double workedHoursToSave = sumOfWorkedHours + Double.parseDouble(input);
-            try {
-                String filename = "sum_of_worked_hours.txt";
-                FileOutputStream outputStream = openFileOutput(filename, Context.MODE_PRIVATE);
-                outputStream.write(Double.toString(workedHoursToSave).getBytes());
-                outputStream.close();
-            } catch (FileNotFoundException e) {
-                Log.e(TAG, "FileNotFoundException " + e.getMessage());
-            } catch (IOException e) {
-                Log.e(TAG, "IOException " + e.getMessage());
-            }
+            workedHours = Double.parseDouble(formatDouble(input));
+            saveSumOfWorkedHoursToFile();
 
-            CheckBox setDate = (CheckBox) findViewById(R.id.setDate);
-            if (setDate.isChecked()) {
-                Intent intent = new Intent(CONTEXT, DatePickerActivity.class);
-                startActivityForResult(intent, 10);
+            if (isCustomDateSetChecked()) {
+                startDatePickerActivity();
             } else {
-                dateInMillis = getCurrentDate();
-                StringBuilder builder = new StringBuilder();
-                readWorkHistoryFromFile(builder);
-                try {
-                    FileOutputStream outputStream = openFileOutput("work_history.txt", Context.MODE_PRIVATE);
-                    outputStream.write((DateFormat.format("E, d MMMM, yyyy", dateInMillis) + " [" + input + "]" + "\n" + builder).getBytes());
-                    outputStream.close();
-                } catch (FileNotFoundException e) {
-                    Log.e(TAG, "FileNotFoundException " + e.getMessage());
-                } catch (IOException e) {
-                    Log.e(TAG, "IOException " + e.getMessage());
-                }
+                saveWorkedHoursToFileWithCurrentDate();
             }
         } else {
             getToastFormattedAsError(CONTEXT, "Wrong input!", LENGTH_SHORT).show();
         }
     }
 
+    private boolean isCustomDateSetChecked() {
+        return ((CheckBox) findViewById(R.id.setDate)).isChecked();
+    }
+
+    private void saveWorkedHoursToFileWithCurrentDate() {
+        dateInMillis = getCurrentDate();
+        StringBuilder builder = new StringBuilder();
+        readWorkHistoryFromFile(builder);
+        try {
+            FileOutputStream outputStream = openFileOutput("work_history.txt", Context.MODE_PRIVATE);
+            outputStream.write((DateFormat.format("E, d MMMM, yyyy", dateInMillis) + " [" + workedHours + "]" + "\n" + builder).getBytes());
+            outputStream.close();
+        } catch (FileNotFoundException e) {
+            Log.e(TAG, "FileNotFoundException " + e.getMessage());
+        } catch (IOException e) {
+            Log.e(TAG, "IOException " + e.getMessage());
+        }
+    }
+
+    private void startDatePickerActivity() {
+        Intent intent = new Intent(CONTEXT, DatePickerActivity.class);
+        startActivityForResult(intent, DATE_PICKER_REQUEST_CODE);
+    }
+
+    private void saveSumOfWorkedHoursToFile() {
+        try {
+            FileOutputStream outputStream = openFileOutput("sum_of_worked_hours.txt", Context.MODE_PRIVATE);
+            outputStream.write(formatDouble(Double.toString(getSumOfWorkedHours() + workedHours)).getBytes());
+            outputStream.close();
+        } catch (FileNotFoundException e) {
+            Log.e(TAG, "FileNotFoundException " + e.getMessage());
+        } catch (IOException e) {
+            Log.e(TAG, "IOException " + e.getMessage());
+        }
+    }
+
     private double getSumOfWorkedHours() {
-        String string = getSumOfWorkedHoursFromFile();
-        return string.equals("") ? 0 : Double.parseDouble(string);
+        String sumOfWorkedHours = getSumOfWorkedHoursFromFile();
+        return sumOfWorkedHours.equals("") ? 0 : Double.parseDouble(sumOfWorkedHours);
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == 10) {
+        if (requestCode == DATE_PICKER_REQUEST_CODE) {
             if (resultCode == RESULT_OK) {
-                dateInMillis = data.getLongExtra("Date", 10);
+                dateInMillis = data.getLongExtra("Date", 0);
 
                 StringBuilder builder = new StringBuilder();
                 readWorkHistoryFromFile(builder);
                 try {
                     FileOutputStream outputStream = openFileOutput("work_history.txt", Context.MODE_PRIVATE);
-                    outputStream.write((DateFormat.format("E, d MMMM, yyyy", dateInMillis) + " [" + input + "]" + "\n" + builder).getBytes());
+                    outputStream.write((DateFormat.format("E, d MMMM, yyyy", dateInMillis) + " [" + workedHours + "]" + "\n" + builder).getBytes());
                     outputStream.close();
                 } catch (FileNotFoundException e) {
                     Log.e(TAG, "FileNotFoundException " + e.getMessage());
@@ -138,6 +150,8 @@ public class MainActivity extends AppCompatActivity {
             InputStreamReader reader = new InputStreamReader(fileInputStream);
             BufferedReader bufferedReader = new BufferedReader(reader);
             String sumOfWorkedHours = bufferedReader.readLine();
+
+            if (sumOfWorkedHours == null) return "";
 
             fileInputStream.close();
             reader.close();
