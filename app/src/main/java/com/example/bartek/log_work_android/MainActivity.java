@@ -66,19 +66,23 @@ public class MainActivity extends AppCompatActivity {
     private void saveWorkedHoursToFileWithCurrentDate() {
         long dateInMillis = getCurrentDate();
         String workHistory = getWorkHistory();
-        saveNewLogInHistory(dateInMillis, workHistory);
+        saveWorkHistory(dateInMillis, workHistory);
     }
 
-    private void saveNewLogInHistory(long dateInMillis, String workHistory) {
+    private void saveWorkHistory(long dateInMillis, String workHistory) {
         try {
-            FileOutputStream outputStream = openFileOutput("work_history.txt", Context.MODE_PRIVATE);
-            outputStream.write((DateFormat.format("E, d MMMM, yyyy", dateInMillis) + " [" + workedHoursAsFormattedString + "]" + "\n" + workHistory).getBytes());
-            outputStream.close();
+            saveToFile(dateInMillis, workHistory);
         } catch (FileNotFoundException e) {
             Log.e(TAG, "FileNotFoundException " + e.getMessage());
         } catch (IOException e) {
             Log.e(TAG, "IOException " + e.getMessage());
         }
+    }
+
+    private void saveToFile(long dateInMillis, String workHistory) throws IOException {
+        FileOutputStream outputStream = openFileOutput("work_history.txt", Context.MODE_PRIVATE);
+        outputStream.write((DateFormat.format("E, d MMMM, yyyy", dateInMillis) + " [" + workedHoursAsFormattedString + "]" + "\n" + workHistory).getBytes());
+        outputStream.close();
     }
 
 
@@ -115,14 +119,18 @@ public class MainActivity extends AppCompatActivity {
     private void saveSumOfWorkedHoursToFile() {
         String sumOfWorkedHoursToSave = getFormattedSumOfWorkedHoursToSave();
         try {
-            FileOutputStream outputStream = openFileOutput("sum_of_worked_hours.txt", Context.MODE_PRIVATE);
-            outputStream.write(sumOfWorkedHoursToSave.getBytes());
-            outputStream.close();
+            save(sumOfWorkedHoursToSave);
         } catch (FileNotFoundException e) {
             Log.e(TAG, "FileNotFoundException " + e.getMessage());
         } catch (IOException e) {
             Log.e(TAG, "IOException " + e.getMessage());
         }
+    }
+
+    private void save(String sumOfWorkedHoursToSave) throws IOException {
+        FileOutputStream outputStream = openFileOutput("sum_of_worked_hours.txt", Context.MODE_PRIVATE);
+        outputStream.write(sumOfWorkedHoursToSave.getBytes());
+        outputStream.close();
     }
 
     private String getFormattedSumOfWorkedHoursToSave() {
@@ -135,7 +143,7 @@ public class MainActivity extends AppCompatActivity {
             if (resultCode == RESULT_OK) {
                 long dateInMillis = data.getLongExtra("Date", 0);
                 String workHistory = getWorkHistory();
-                saveNewLogInHistory(dateInMillis, workHistory);
+                saveWorkHistory(dateInMillis, workHistory);
             }
         }
     }
