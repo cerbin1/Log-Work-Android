@@ -65,8 +65,11 @@ public class MainActivity extends AppCompatActivity {
 
     private void saveWorkedHoursToFileWithCurrentDate() {
         long dateInMillis = getCurrentDate();
-        StringBuilder workHistory = new StringBuilder();
-        readWorkHistoryFromFile(workHistory);
+        String workHistory = getWorkHistory();
+        saveNewLogInHistory(dateInMillis, workHistory);
+    }
+
+    private void saveNewLogInHistory(long dateInMillis, String workHistory) {
         try {
             FileOutputStream outputStream = openFileOutput("work_history.txt", Context.MODE_PRIVATE);
             outputStream.write((DateFormat.format("E, d MMMM, yyyy", dateInMillis) + " [" + workedHoursAsFormattedString + "]" + "\n" + workHistory).getBytes());
@@ -76,6 +79,32 @@ public class MainActivity extends AppCompatActivity {
         } catch (IOException e) {
             Log.e(TAG, "IOException " + e.getMessage());
         }
+    }
+
+
+    private String getWorkHistory() {
+        try {
+            return getWorkHistoryFromFile();
+        } catch (IOException e) {
+            Log.e(TAG, "IOException " + e.getMessage());
+            return "";
+        }
+    }
+
+    private String getWorkHistoryFromFile() throws IOException {
+        FileInputStream fileInputStream = CONTEXT.openFileInput("work_history.txt");
+        InputStreamReader reader = new InputStreamReader(fileInputStream);
+        BufferedReader bufferedReader = new BufferedReader(reader);
+        StringBuilder workHistory = new StringBuilder();
+        String line;
+        while ((line = bufferedReader.readLine()) != null) {
+            workHistory.append(line);
+            workHistory.append("\n");
+        }
+        fileInputStream.close();
+        reader.close();
+        bufferedReader.close();
+        return workHistory.toString();
     }
 
     private void startDatePickerActivity() {
@@ -105,42 +134,14 @@ public class MainActivity extends AppCompatActivity {
         if (requestCode == DATE_PICKER_REQUEST_CODE) {
             if (resultCode == RESULT_OK) {
                 long dateInMillis = data.getLongExtra("Date", 0);
-
-                StringBuilder workHistoryStringBuilder = new StringBuilder();
-                readWorkHistoryFromFile(workHistoryStringBuilder);
-                try {
-                    FileOutputStream outputStream = openFileOutput("work_history.txt", Context.MODE_PRIVATE);
-                    outputStream.write((DateFormat.format("E, d MMMM, yyyy", dateInMillis) + " [" + workedHoursAsFormattedString + "]" + "\n" + workHistoryStringBuilder).getBytes());
-                    outputStream.close();
-                } catch (FileNotFoundException e) {
-                    Log.e(TAG, "FileNotFoundException " + e.getMessage());
-                } catch (IOException e) {
-                    Log.e(TAG, "IOException " + e.getMessage());
-                }
+                String workHistory = getWorkHistory();
+                saveNewLogInHistory(dateInMillis, workHistory);
             }
         }
     }
 
     public long getCurrentDate() {
         return Calendar.getInstance().getTime().getTime();
-    }
-
-    private void readWorkHistoryFromFile(StringBuilder stringBuilder) {
-        try {
-            FileInputStream fileInputStream = CONTEXT.openFileInput("work_history.txt");
-            InputStreamReader reader = new InputStreamReader(fileInputStream);
-            BufferedReader bufferedReader = new BufferedReader(reader);
-            String line;
-            while ((line = bufferedReader.readLine()) != null) {
-                stringBuilder.append(line);
-                stringBuilder.append("\n");
-            }
-            fileInputStream.close();
-            reader.close();
-            bufferedReader.close();
-        } catch (IOException e) {
-            Log.e(TAG, "IOException " + e.getMessage());
-        }
     }
 
     private String getSumOfWorkedHoursAsString() {

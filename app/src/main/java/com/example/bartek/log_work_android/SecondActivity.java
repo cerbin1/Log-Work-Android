@@ -1,6 +1,5 @@
 package com.example.bartek.log_work_android;
 
-import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
@@ -43,10 +42,10 @@ public class SecondActivity extends AppCompatActivity {
         sumOfWorkedHours = parseDouble(sumOfWorkedHoursString);
         workHistoryTextView = (TextView) findViewById(R.id.workHistory);
 
-        workHistoryTextView.setText(displayWorkHistory());
+        workHistoryTextView.setText(getWorkHistory());
     }
 
-    private String displayWorkHistory() {
+    private String getWorkHistory() {
         try {
             return getWorkHistoryFromFile();
         } catch (IOException e) {
@@ -56,6 +55,7 @@ public class SecondActivity extends AppCompatActivity {
     }
 
     private String getWorkHistoryFromFile() throws IOException {
+        System.out.println(CONTEXT);
         FileInputStream fileInputStream = CONTEXT.openFileInput("work_history.txt");
         InputStreamReader reader = new InputStreamReader(fileInputStream);
         BufferedReader bufferedReader = new BufferedReader(reader);
@@ -97,8 +97,7 @@ public class SecondActivity extends AppCompatActivity {
                         dialog.cancel();
                     }
                 });
-        AlertDialog alert = builder.create();
-        alert.show();
+        builder.create().show();
     }
 
     private void resetTextViewsAndFields() {
