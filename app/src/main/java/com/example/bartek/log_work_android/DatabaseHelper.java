@@ -1,9 +1,11 @@
 package com.example.bartek.log_work_android;
 
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.text.format.DateFormat;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String DATABASE_NAME = "work.db";
@@ -17,7 +19,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String SQL_CREATE_ENTRIES = "CREATE TABLE " + TABLE_NAME + "("
             + ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
             + DATE + " TEXT, "
-            + HOURS_WORKED + " FLOAT)";
+            + HOURS_WORKED + " REAL)";
     private static final String SQL_DELETE_ENTRIES =
             "DROP TABLE IF EXISTS " + TABLE_NAME;
 
@@ -35,4 +37,15 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         sqLiteDatabase.execSQL(SQL_DELETE_ENTRIES);
         onCreate(sqLiteDatabase);
     }
+
+    public boolean insert(long dateInMillis, double hoursWorked) {
+        SQLiteDatabase database = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        String date = DateFormat.format("EEEE, d.M", dateInMillis).toString();
+        values.put(DATE, date);
+        values.put(HOURS_WORKED, hoursWorked);
+        long result = database.insert(TABLE_NAME, null, values);
+        return result != -1;
+    }
+
 }

@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import java.io.BufferedReader;
 import java.io.FileInputStream;
@@ -29,12 +30,16 @@ public class MainActivity extends AppCompatActivity {
     private static final int DATE_PICKER_REQUEST_CODE = 10;
     private final Context CONTEXT = MainActivity.this;
 
+    private DatabaseHelper database;
+
     private String workedHoursAsFormattedString;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        database = new DatabaseHelper(this);
     }
 
     public void startSecondActivity(View view) {
@@ -53,6 +58,8 @@ public class MainActivity extends AppCompatActivity {
                 startDatePickerActivity();
             } else {
                 saveWorkedHoursToFileWithCurrentDate();
+                boolean isInserted = database.insert(getCurrentDate(), Double.parseDouble(input));
+                Toast.makeText(MainActivity.this, isInserted ? "Data inserted" : "Data not inserted", Toast.LENGTH_SHORT).show();
             }
         } else {
             getToastFormattedAsError(CONTEXT, "Wrong input!", LENGTH_SHORT).show();
@@ -66,6 +73,7 @@ public class MainActivity extends AppCompatActivity {
     private void saveWorkedHoursToFileWithCurrentDate() {
         long dateInMillis = getCurrentDate();
         String workHistory = getWorkHistory();
+
         saveWorkHistory(dateInMillis, workHistory);
     }
 
