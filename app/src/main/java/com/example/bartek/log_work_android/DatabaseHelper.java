@@ -10,19 +10,13 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final int DATABASE_VERSION = 1;
 
     private final static String ID = "Id";
-    private final static String DAY_NUMBER = "Day";
-    private final static String MONTH_NUMBER = "Month";
-    private final static String YEAR = "Year";
-    private final static String DAY_NAME = "Day name";
+    private final static String DATE = "Date";
     private final static String HOURS_WORKED = "Hours worked";
 
     private static final String TABLE_NAME = "LOG_WORK";
     private static final String SQL_CREATE_ENTRIES = "CREATE TABLE " + TABLE_NAME + "("
             + ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
-            + DAY_NUMBER + " INTEGER, "
-            + MONTH_NUMBER + " INTEGER, "
-            + YEAR + " INTEGER"
-            + DAY_NAME + " TEXT, "
+            + DATE + " TEXT, "
             + HOURS_WORKED + " FLOAT)";
     private static final String SQL_DELETE_ENTRIES =
             "DROP TABLE IF EXISTS " + TABLE_NAME;
