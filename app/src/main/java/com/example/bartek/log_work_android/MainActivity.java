@@ -149,7 +149,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public long getCurrentDate() {
-        return Calendar.getInstance().getTime().getTime();
+        return Calendar.getInstance().getTimeInMillis();
     }
 
     private String getSumOfWorkedHoursAsString() {
