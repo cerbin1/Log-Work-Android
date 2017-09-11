@@ -81,7 +81,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void saveToFile(long dateInMillis, String workHistory) throws IOException {
         FileOutputStream outputStream = openFileOutput("work_history.txt", Context.MODE_PRIVATE);
-        outputStream.write((DateFormat.format("E, d MMMM, yyyy", dateInMillis) + " [" + workedHoursAsFormattedString + "]" + "\n" + workHistory).getBytes());
+        outputStream.write((DateFormat.format("EEEE, d.M", dateInMillis) + " [" + workedHoursAsFormattedString + "]" + "\n" + workHistory).getBytes());
         outputStream.close();
     }
 
