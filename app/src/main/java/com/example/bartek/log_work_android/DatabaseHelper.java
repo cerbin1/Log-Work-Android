@@ -54,4 +54,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         SQLiteDatabase database = this.getReadableDatabase();
         return database.rawQuery("SELECT * FROM " + TABLE_NAME, null);
     }
+
+    public Cursor getSumOfWorkedHours() {
+        SQLiteDatabase database = this.getReadableDatabase();
+        return database.rawQuery("SELECT SUM(" + HOURS_WORKED + ") FROM " + TABLE_NAME, null);
+    }
 }

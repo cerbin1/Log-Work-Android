@@ -39,13 +39,21 @@ public class SecondActivity extends AppCompatActivity {
 
         database = new DatabaseHelper(this);
 
-        String sumOfWorkedHoursString = getSumOfWorkedHoursFromExtras();
+        String sumOfWorkedHoursString = getSumOfWorkedHoursFromDatabase();
         sumOfWorkedHoursTextView = (TextView) findViewById(R.id.sumOfWorkedHours);
         sumOfWorkedHoursTextView.setText(sumOfWorkedHoursString);
         sumOfWorkedHours = parseDouble(sumOfWorkedHoursString);
         workHistoryTextView = (TextView) findViewById(R.id.workHistory);
 
         workHistoryTextView.setText(getWorkHistoryFromDatabase());
+    }
+
+    private String getSumOfWorkedHoursFromDatabase() {
+        Cursor cur = database.getSumOfWorkedHours();
+        if (cur.moveToFirst()) {
+            return Double.toString(cur.getDouble(0));
+        }
+        return "";
     }
 
     private String getWorkHistoryFromDatabase() {
@@ -63,10 +71,6 @@ public class SecondActivity extends AppCompatActivity {
                     .append(data.getString(2)).append("\n");
         }
         return builder.toString();
-    }
-
-    private String getSumOfWorkedHoursFromExtras() {
-        return getIntent().getExtras().getString("sumOfWorkedHours");
     }
 
     public void deleteSumOfWorkedHours(View view) {

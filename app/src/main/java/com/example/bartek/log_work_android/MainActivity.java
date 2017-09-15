@@ -4,24 +4,16 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import java.io.BufferedReader;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStreamReader;
 import java.util.Calendar;
 
 import utils.PatternChecker;
 
 import static android.widget.Toast.LENGTH_SHORT;
-import static utils.Formatter.formatDouble;
 import static utils.Formatter.getToastFormattedAsError;
 
 public class MainActivity extends AppCompatActivity {
@@ -31,7 +23,6 @@ public class MainActivity extends AppCompatActivity {
 
     private DatabaseHelper database;
 
-    private String workedHoursAsFormattedString;
     private double hoursWorked;
 
     @Override
@@ -44,15 +35,12 @@ public class MainActivity extends AppCompatActivity {
 
     public void startSecondActivity(View view) {
         Intent intent = new Intent(CONTEXT, SecondActivity.class);
-        intent.putExtra("sumOfWorkedHours", formatDouble(getSumOfWorkedHoursAsString()));
         startActivity(intent);
     }
 
     public void submitWorkedHours(View view) {
         String input = ((EditText) findViewById(R.id.workedHoursEditText)).getText().toString();
         if (PatternChecker.matches(input)) {
-            workedHoursAsFormattedString = formatDouble(input);
-            saveSumOfWorkedHoursToFile();
             hoursWorked = Double.parseDouble(input);
 
             if (isCustomDateSetChecked()) {
@@ -75,27 +63,6 @@ public class MainActivity extends AppCompatActivity {
         startActivityForResult(intent, DATE_PICKER_REQUEST_CODE);
     }
 
-    private void saveSumOfWorkedHoursToFile() {
-        String sumOfWorkedHoursToSave = getFormattedSumOfWorkedHoursToSave();
-        try {
-            save(sumOfWorkedHoursToSave);
-        } catch (FileNotFoundException e) {
-            Log.e(TAG, "FileNotFoundException " + e.getMessage());
-        } catch (IOException e) {
-            Log.e(TAG, "IOException " + e.getMessage());
-        }
-    }
-
-    private void save(String sumOfWorkedHoursToSave) throws IOException {
-        FileOutputStream outputStream = openFileOutput("sum_of_worked_hours.txt", Context.MODE_PRIVATE);
-        outputStream.write(sumOfWorkedHoursToSave.getBytes());
-        outputStream.close();
-    }
-
-    private String getFormattedSumOfWorkedHoursToSave() {
-        return formatDouble(Double.toString(Double.parseDouble(getSumOfWorkedHoursAsString()) + Double.parseDouble(workedHoursAsFormattedString)));
-    }
-
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == DATE_PICKER_REQUEST_CODE) {
@@ -108,26 +75,5 @@ public class MainActivity extends AppCompatActivity {
 
     public long getCurrentDate() {
         return Calendar.getInstance().getTimeInMillis();
-    }
-
-    private String getSumOfWorkedHoursAsString() {
-        try {
-            return getSumOfWorkedHoursFromFile();
-        } catch (IOException e) {
-            Log.e(TAG, "IOException " + e.getMessage());
-            return "";
-        }
-    }
-
-    private String getSumOfWorkedHoursFromFile() throws IOException {
-        FileInputStream fileInputStream = CONTEXT.openFileInput("sum_of_worked_hours.txt");
-        InputStreamReader reader = new InputStreamReader(fileInputStream);
-        BufferedReader bufferedReader = new BufferedReader(reader);
-        String sumOfWorkedHours = bufferedReader.readLine();
-
-        fileInputStream.close();
-        reader.close();
-        bufferedReader.close();
-        return sumOfWorkedHours == null ? "0" : formatDouble(sumOfWorkedHours);
     }
 }
