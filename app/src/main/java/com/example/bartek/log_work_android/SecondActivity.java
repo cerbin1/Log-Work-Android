@@ -2,19 +2,17 @@ package com.example.bartek.log_work_android;
 
 import android.content.Context;
 import android.content.DialogInterface;
+import android.database.Cursor;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
-import java.io.BufferedReader;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStreamReader;
 
 import static android.app.AlertDialog.Builder;
 import static android.widget.Toast.LENGTH_LONG;
@@ -32,10 +30,14 @@ public class SecondActivity extends AppCompatActivity {
     private TextView workHistoryTextView;
     private double sumOfWorkedHours;
 
+    private DatabaseHelper database;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.second_activity);
+
+        database = new DatabaseHelper(this);
 
         String sumOfWorkedHoursString = getSumOfWorkedHoursFromExtras();
         sumOfWorkedHoursTextView = (TextView) findViewById(R.id.sumOfWorkedHours);
@@ -43,34 +45,24 @@ public class SecondActivity extends AppCompatActivity {
         sumOfWorkedHours = parseDouble(sumOfWorkedHoursString);
         workHistoryTextView = (TextView) findViewById(R.id.workHistory);
 
-        workHistoryTextView.setText(getWorkHistory());
+        workHistoryTextView.setText(getWorkHistoryFromDatabase());
     }
 
-    @NonNull
-    private String getWorkHistory() {
-        try {
-            return getWorkHistoryFromFile();
-        } catch (IOException e) {
-            Log.e(TAG, "IOException " + e.getMessage());
+    private String getWorkHistoryFromDatabase() {
+        Cursor data = database.getWorkHistory();
+        if (data.getCount() == 0) {
+            Toast.makeText(this, "No history work", LENGTH_LONG).show();
             return "";
         }
-    }
 
-    @NonNull
-    private String getWorkHistoryFromFile() throws IOException {
-        FileInputStream fileInputStream = CONTEXT.openFileInput("work_history.txt");
-        InputStreamReader reader = new InputStreamReader(fileInputStream);
-        BufferedReader bufferedReader = new BufferedReader(reader);
-        StringBuilder workHistory = new StringBuilder();
-        String line;
-        while ((line = bufferedReader.readLine()) != null) {
-            workHistory.append("\n");
-            workHistory.append(line);
+        StringBuilder builder = new StringBuilder();
+        while (data.moveToNext()) {
+            builder
+                    .append(data.getString(0)).append(" ")
+                    .append(data.getString(1)).append(" ")
+                    .append(data.getString(2)).append("\n");
         }
-        fileInputStream.close();
-        reader.close();
-        bufferedReader.close();
-        return workHistory.toString();
+        return builder.toString();
     }
 
     private String getSumOfWorkedHoursFromExtras() {
@@ -110,13 +102,6 @@ public class SecondActivity extends AppCompatActivity {
 
     private void clearFiles() throws IOException {
         clearSumOfWorkedHoursFile();
-        clearWorkHistoryFile();
-    }
-
-    private void clearWorkHistoryFile() throws IOException {
-        FileOutputStream outputStream = openFileOutput("work_history.txt", Context.MODE_PRIVATE);
-        outputStream.write("".getBytes());
-        outputStream.close();
     }
 
     private void clearSumOfWorkedHoursFile() throws IOException {

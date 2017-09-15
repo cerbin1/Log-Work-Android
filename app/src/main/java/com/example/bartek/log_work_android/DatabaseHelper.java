@@ -3,6 +3,7 @@ package com.example.bartek.log_work_android;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.text.format.DateFormat;
@@ -49,4 +50,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return result != -1;
     }
 
+    public Cursor getWorkHistory() {
+        SQLiteDatabase database = this.getReadableDatabase();
+        return database.rawQuery("SELECT * FROM " + TABLE_NAME, null);
+    }
 }
