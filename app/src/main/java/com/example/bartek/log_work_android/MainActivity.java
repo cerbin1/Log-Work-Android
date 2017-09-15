@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.text.format.DateFormat;
 import android.util.Log;
 import android.view.View;
 import android.widget.CheckBox;
@@ -33,6 +32,7 @@ public class MainActivity extends AppCompatActivity {
     private DatabaseHelper database;
 
     private String workedHoursAsFormattedString;
+    private double hoursWorked;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,12 +53,12 @@ public class MainActivity extends AppCompatActivity {
         if (PatternChecker.matches(input)) {
             workedHoursAsFormattedString = formatDouble(input);
             saveSumOfWorkedHoursToFile();
+            hoursWorked = Double.parseDouble(input);
 
             if (isCustomDateSetChecked()) {
                 startDatePickerActivity();
             } else {
-                saveWorkedHoursToFileWithCurrentDate();
-                boolean isInserted = database.insert(getCurrentDate(), Double.parseDouble(input));
+                boolean isInserted = database.insert(getCurrentDate(), hoursWorked);
                 Toast.makeText(MainActivity.this, isInserted ? "Data inserted" : "Data not inserted", Toast.LENGTH_SHORT).show();
             }
         } else {
@@ -68,55 +68,6 @@ public class MainActivity extends AppCompatActivity {
 
     private boolean isCustomDateSetChecked() {
         return ((CheckBox) findViewById(R.id.setDate)).isChecked();
-    }
-
-    private void saveWorkedHoursToFileWithCurrentDate() {
-        long dateInMillis = getCurrentDate();
-        String workHistory = getWorkHistory();
-
-        saveWorkHistory(dateInMillis, workHistory);
-    }
-
-    private void saveWorkHistory(long dateInMillis, String workHistory) {
-        try {
-            saveToFile(dateInMillis, workHistory);
-        } catch (FileNotFoundException e) {
-            Log.e(TAG, "FileNotFoundException " + e.getMessage());
-        } catch (IOException e) {
-            Log.e(TAG, "IOException " + e.getMessage());
-        }
-    }
-
-    private void saveToFile(long dateInMillis, String workHistory) throws IOException {
-        FileOutputStream outputStream = openFileOutput("work_history.txt", Context.MODE_PRIVATE);
-        outputStream.write((DateFormat.format("EEEE, d.M", dateInMillis) + " [" + workedHoursAsFormattedString + "]" + "\n" + workHistory).getBytes());
-        outputStream.close();
-    }
-
-
-    private String getWorkHistory() {
-        try {
-            return getWorkHistoryFromFile();
-        } catch (IOException e) {
-            Log.e(TAG, "IOException " + e.getMessage());
-            return "";
-        }
-    }
-
-    private String getWorkHistoryFromFile() throws IOException {
-        FileInputStream fileInputStream = CONTEXT.openFileInput("work_history.txt");
-        InputStreamReader reader = new InputStreamReader(fileInputStream);
-        BufferedReader bufferedReader = new BufferedReader(reader);
-        StringBuilder workHistory = new StringBuilder();
-        String line;
-        while ((line = bufferedReader.readLine()) != null) {
-            workHistory.append(line);
-            workHistory.append("\n");
-        }
-        fileInputStream.close();
-        reader.close();
-        bufferedReader.close();
-        return workHistory.toString();
     }
 
     private void startDatePickerActivity() {
@@ -150,8 +101,7 @@ public class MainActivity extends AppCompatActivity {
         if (requestCode == DATE_PICKER_REQUEST_CODE) {
             if (resultCode == RESULT_OK) {
                 long dateInMillis = data.getLongExtra("Date", 0);
-                String workHistory = getWorkHistory();
-                saveWorkHistory(dateInMillis, workHistory);
+                database.insert(dateInMillis, hoursWorked);
             }
         }
     }
