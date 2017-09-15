@@ -59,4 +59,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         SQLiteDatabase database = this.getReadableDatabase();
         return database.rawQuery("SELECT SUM(" + HOURS_WORKED + ") FROM " + TABLE_NAME, null);
     }
+
+    public void clearHistory() {
+        SQLiteDatabase database = this.getReadableDatabase();
+        database.execSQL(SQL_DELETE_ENTRIES);
+        onCreate(database);
+    }
 }

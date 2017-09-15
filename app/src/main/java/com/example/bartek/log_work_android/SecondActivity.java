@@ -1,18 +1,12 @@
 package com.example.bartek.log_work_android;
 
-import android.content.Context;
 import android.content.DialogInterface;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
 
 import static android.app.AlertDialog.Builder;
 import static android.widget.Toast.LENGTH_LONG;
@@ -79,15 +73,9 @@ public class SecondActivity extends AppCompatActivity {
                 .setCancelable(false)
                 .setPositiveButton("Delete", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        makeText(CONTEXT, "Deleted", LENGTH_SHORT).show();
-                        try {
-                            clearFiles();
-                        } catch (FileNotFoundException e) {
-                            Log.e(TAG, "FileNotFoundException " + e.getMessage());
-                        } catch (IOException e) {
-                            Log.e(TAG, "IOException " + e.getMessage());
-                        }
                         resetTextViewsAndFields();
+                        database.clearHistory();
+                        makeText(CONTEXT, "Deleted", LENGTH_SHORT).show();
                     }
                 })
                 .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
@@ -102,16 +90,6 @@ public class SecondActivity extends AppCompatActivity {
         sumOfWorkedHoursTextView.setText("0");
         workHistoryTextView.setText("");
         sumOfWorkedHours = 0;
-    }
-
-    private void clearFiles() throws IOException {
-        clearSumOfWorkedHoursFile();
-    }
-
-    private void clearSumOfWorkedHoursFile() throws IOException {
-        FileOutputStream outputStream = openFileOutput("sum_of_worked_hours.txt", Context.MODE_PRIVATE);
-        outputStream.write("0".getBytes());
-        outputStream.close();
     }
 
     public void displaySalary(View view) {
