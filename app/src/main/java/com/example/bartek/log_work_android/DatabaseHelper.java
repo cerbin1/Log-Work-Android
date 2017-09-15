@@ -11,12 +11,13 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String DATABASE_NAME = "work.db";
     public static final int DATABASE_VERSION = 1;
 
-    private final static String ID = "Id";
-    private final static String DATE = "Date";
-    private final static String HOURS_WORKED = "Hours worked";
+    private static final String ID = "Id";
+    private static final String DATE = "Date";
+    private static final String HOURS_WORKED = "Hours_worked";
 
-    private static final String TABLE_NAME = "LOG_WORK";
-    private static final String SQL_CREATE_ENTRIES = "CREATE TABLE " + TABLE_NAME + "("
+    private static final String TABLE_NAME = "Log_Work";
+    private static final String SQL_CREATE_ENTRIES = "CREATE TABLE "
+            + TABLE_NAME + "("
             + ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
             + DATE + " TEXT, "
             + HOURS_WORKED + " REAL)";
