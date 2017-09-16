@@ -16,9 +16,7 @@ import static java.lang.Double.parseDouble;
 import static utils.Formatter.formatDouble;
 
 public class SecondActivity extends AppCompatActivity {
-    private static final String TAG = "MainActivity";
     private static final double SALARY_PER_HOUR = 9.0;
-    private final SecondActivity CONTEXT = SecondActivity.this;
 
     private TextView sumOfWorkedHoursTextView;
     private TextView workHistoryTextView;
@@ -75,7 +73,7 @@ public class SecondActivity extends AppCompatActivity {
                     public void onClick(DialogInterface dialog, int id) {
                         resetTextViewsAndFields();
                         database.clearHistory();
-                        makeText(CONTEXT, "Deleted", LENGTH_SHORT).show();
+                        makeText(SecondActivity.this, "Deleted", LENGTH_SHORT).show();
                     }
                 })
                 .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
@@ -93,7 +91,7 @@ public class SecondActivity extends AppCompatActivity {
     }
 
     public void displaySalary(View view) {
-        makeText(CONTEXT, formatDouble(getSalaryAsString()), LENGTH_LONG).show();
+        makeText(this, formatDouble(getSalaryAsString()), LENGTH_LONG).show();
     }
 
     private String getSalaryAsString() {

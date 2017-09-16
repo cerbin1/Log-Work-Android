@@ -1,6 +1,5 @@
 package com.example.bartek.log_work_android;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -17,9 +16,7 @@ import static android.widget.Toast.LENGTH_SHORT;
 import static utils.Formatter.getToastFormattedAsError;
 
 public class MainActivity extends AppCompatActivity {
-    private static final String TAG = "MainActivity";
     private static final int DATE_PICKER_REQUEST_CODE = 10;
-    private final Context CONTEXT = MainActivity.this;
 
     private DatabaseHelper database;
 
@@ -34,7 +31,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void startSecondActivity(View view) {
-        Intent intent = new Intent(CONTEXT, SecondActivity.class);
+        Intent intent = new Intent(this, SecondActivity.class);
         startActivity(intent);
     }
 
@@ -50,7 +47,7 @@ public class MainActivity extends AppCompatActivity {
                 Toast.makeText(MainActivity.this, isInserted ? "Saved" : "Data not saved", Toast.LENGTH_SHORT).show();
             }
         } else {
-            getToastFormattedAsError(CONTEXT, "Wrong input!", LENGTH_SHORT).show();
+            getToastFormattedAsError(this, "Wrong input!", LENGTH_SHORT).show();
         }
     }
 
@@ -59,7 +56,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void startDatePickerActivity() {
-        Intent intent = new Intent(CONTEXT, DatePickerActivity.class);
+        Intent intent = new Intent(this, DatePickerActivity.class);
         startActivityForResult(intent, DATE_PICKER_REQUEST_CODE);
     }
 
