@@ -47,7 +47,7 @@ public class MainActivity extends AppCompatActivity {
                 startDatePickerActivity();
             } else {
                 boolean isInserted = database.insert(getCurrentDate(), hoursWorked);
-                Toast.makeText(MainActivity.this, isInserted ? "Data inserted" : "Data not inserted", Toast.LENGTH_SHORT).show();
+                Toast.makeText(MainActivity.this, isInserted ? "Saved" : "Data not saved", Toast.LENGTH_SHORT).show();
             }
         } else {
             getToastFormattedAsError(CONTEXT, "Wrong input!", LENGTH_SHORT).show();

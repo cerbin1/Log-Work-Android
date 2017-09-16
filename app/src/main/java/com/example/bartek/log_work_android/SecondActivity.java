@@ -53,7 +53,7 @@ public class SecondActivity extends AppCompatActivity {
     private String getWorkHistoryFromDatabase() {
         Cursor data = database.getWorkHistory();
         if (data.getCount() == 0) {
-            Toast.makeText(this, "No history work", LENGTH_LONG).show();
+            Toast.makeText(this, "No history work found", LENGTH_LONG).show();
             return "";
         }
 
