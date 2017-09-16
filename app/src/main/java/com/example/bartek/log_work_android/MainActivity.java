@@ -11,7 +11,7 @@ import android.widget.Toast;
 
 import java.util.Calendar;
 
-import utils.PatternChecker;
+import utils.PatternValidator;
 
 import static android.widget.Toast.LENGTH_SHORT;
 import static utils.Formatter.getToastFormattedAsError;
@@ -40,7 +40,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void submitWorkedHours(View view) {
         String input = ((EditText) findViewById(R.id.workedHoursEditText)).getText().toString();
-        if (PatternChecker.matches(input)) {
+        if (PatternValidator.isValid(input)) {
             hoursWorked = Double.parseDouble(input);
 
             if (isCustomDateSetChecked()) {
