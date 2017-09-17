@@ -52,7 +52,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     public Cursor getWorkHistory() {
         SQLiteDatabase database = this.getReadableDatabase();
-        return database.rawQuery("SELECT * FROM " + TABLE_NAME, null);
+        return database.rawQuery("SELECT * FROM " + TABLE_NAME + " ORDER BY  " + ID + " DESC", null);
     }
 
     public Cursor getSumOfWorkedHours() {
