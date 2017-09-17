@@ -33,7 +33,7 @@ public class SecondActivity extends AppCompatActivity {
 
         String sumOfWorkedHoursString = getSumOfWorkedHoursFromDatabase();
         sumOfWorkedHoursTextView = (TextView) findViewById(R.id.sumOfWorkedHours);
-        sumOfWorkedHoursTextView.setText(sumOfWorkedHoursString);
+        sumOfWorkedHoursTextView.setText(formatDouble(sumOfWorkedHoursString));
         sumOfWorkedHours = parseDouble(sumOfWorkedHoursString);
         workHistoryTextView = (TextView) findViewById(R.id.workHistory);
 
