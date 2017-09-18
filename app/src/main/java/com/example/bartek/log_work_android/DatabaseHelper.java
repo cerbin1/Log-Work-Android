@@ -43,7 +43,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public boolean insert(long dateInMillis, double hoursWorked) {
         SQLiteDatabase database = this.getWritableDatabase();
         ContentValues values = new ContentValues();
-        String date = DateFormat.format("EEEE, d.M", dateInMillis).toString();
+        String date = DateFormat.format("EEEE d.M", dateInMillis).toString();
         values.put(DATE, date);
         values.put(HOURS_WORKED, hoursWorked);
         long result = database.insert(TABLE_NAME, null, values);

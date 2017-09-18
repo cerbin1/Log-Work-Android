@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.TableLayout;
+import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -22,6 +23,7 @@ public class SecondActivity extends AppCompatActivity {
     private TextView sumOfWorkedHoursTextView;
     private TextView workHistoryTextView;
     private double sumOfWorkedHours;
+    private TableLayout tableLayout;
 
     private DatabaseHelper database;
 
@@ -37,8 +39,9 @@ public class SecondActivity extends AppCompatActivity {
         sumOfWorkedHoursTextView.setText(formatDouble(sumOfWorkedHoursString));
         sumOfWorkedHours = parseDouble(sumOfWorkedHoursString);
         workHistoryTextView = (TextView) findViewById(R.id.workHistory);
+        tableLayout = (TableLayout) findViewById(R.id.tableLayout);
+        displayWorkHistory();
 
-        workHistoryTextView.setText(getWorkHistoryFromDatabase());
     }
 
     private String getSumOfWorkedHoursFromDatabase() {
@@ -49,23 +52,24 @@ public class SecondActivity extends AppCompatActivity {
         return "";
     }
 
-    private String getWorkHistoryFromDatabase() {
+    private void displayWorkHistory() {
         Cursor data = database.getWorkHistory();
         if (data.getCount() == 0) {
             Toast.makeText(this, "No history work found", LENGTH_LONG).show();
-            return "";
+            return;
         }
-        TableLayout tableLayout = (TableLayout) findViewById(R.id.tableLayout);
-
-
-        StringBuilder builder = new StringBuilder();
         while (data.moveToNext()) {
-            builder
-                    .append(data.getString(0)).append(" ")
-                    .append(data.getString(1)).append(" ")
-                    .append(data.getString(2)).append("\n");
+            String builder = data.getString(1) + " " +
+                    data.getString(2) + "\n";
+
+            TableRow row = new TableRow(this);
+            TextView textView = new TextView(this);
+            textView.setTextSize(14);
+            textView.setText(builder);
+            row.addView(textView);
+            tableLayout.addView(row);
+
         }
-        return builder.toString();
     }
 
     public void deleteSumOfWorkedHours(View view) {
