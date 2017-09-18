@@ -5,6 +5,7 @@ import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.widget.TableLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -54,6 +55,8 @@ public class SecondActivity extends AppCompatActivity {
             Toast.makeText(this, "No history work found", LENGTH_LONG).show();
             return "";
         }
+        TableLayout tableLayout = (TableLayout) findViewById(R.id.tableLayout);
+
 
         StringBuilder builder = new StringBuilder();
         while (data.moveToNext()) {
