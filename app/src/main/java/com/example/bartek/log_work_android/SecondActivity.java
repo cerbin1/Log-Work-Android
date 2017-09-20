@@ -5,8 +5,10 @@ import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.widget.ImageButton;
 import android.widget.TableLayout;
 import android.widget.TableRow;
+import android.widget.TableRow.LayoutParams;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -58,15 +60,31 @@ public class SecondActivity extends AppCompatActivity {
             Toast.makeText(this, "No history work found", LENGTH_LONG).show();
             return;
         }
+        tableLayout.removeAllViews();
         while (data.moveToNext()) {
-            String builder = data.getString(1) + " " +
-                    data.getString(2) + "\n";
-
-            TableRow row = new TableRow(this);
+            String builder = data.getString(1) + " "
+                    + "{ " + data.getString(2) + " }";
+            final int buttonId = Integer.parseInt(data.getString(0));
+            final TableRow row = new TableRow(this);
+            row.setBackgroundResource(R.drawable.border);
             TextView textView = new TextView(this);
-            textView.setTextSize(14);
+            textView.setTextSize(20);
             textView.setText(builder);
             row.addView(textView);
+            ImageButton button = new ImageButton(this);
+            button.setImageResource(R.mipmap.image_clear);
+            button.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    int deletedRows = database.delete(Integer.toString(buttonId));
+                    tableLayout.removeView(row);
+                    Toast.makeText(SecondActivity.this, deletedRows > 0 ? "Data deleted" : "Data not deleted", Toast.LENGTH_SHORT).show();
+                }
+            });
+            button.setPadding(0, 0, 0, 0);
+            button.setBackground(null);
+            button.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.MATCH_PARENT));
+            row.addView(button);
             tableLayout.addView(row);
 
         }
