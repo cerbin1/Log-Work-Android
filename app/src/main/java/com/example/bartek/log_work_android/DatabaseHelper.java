@@ -17,6 +17,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String HOURS_WORKED = "Hours_worked";
 
     private static final String TABLE_NAME = "Log_Work";
+    public static final String SQL_SELECT_SUM_OF_WORKED_HOURS = "SELECT SUM(" + HOURS_WORKED + ") FROM " + TABLE_NAME;
+    public static final String SQL_SELECT_WORK_HISTORY = "SELECT * FROM " + TABLE_NAME + " ORDER BY  " + ID + " DESC";
     private static final String SQL_CREATE_ENTRIES = "CREATE TABLE "
             + TABLE_NAME + "("
             + ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
@@ -52,12 +54,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     public Cursor getWorkHistory() {
         SQLiteDatabase database = this.getReadableDatabase();
-        return database.rawQuery("SELECT * FROM " + TABLE_NAME + " ORDER BY  " + ID + " DESC", null);
+        return database.rawQuery(SQL_SELECT_WORK_HISTORY, null);
     }
 
     public Cursor getSumOfWorkedHours() {
         SQLiteDatabase database = this.getReadableDatabase();
-        return database.rawQuery("SELECT SUM(" + HOURS_WORKED + ") FROM " + TABLE_NAME, null);
+        return database.rawQuery(SQL_SELECT_SUM_OF_WORKED_HOURS, null);
     }
 
     public void clearHistory() {
