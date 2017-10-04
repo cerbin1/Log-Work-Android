@@ -8,25 +8,18 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.text.format.DateFormat;
 
+import static com.example.bartek.log_work_android.DatabaseNamesHelper.DATABASE_NAME;
+import static com.example.bartek.log_work_android.DatabaseNamesHelper.DATABASE_VERSION;
+import static com.example.bartek.log_work_android.DatabaseNamesHelper.DATE;
+import static com.example.bartek.log_work_android.DatabaseNamesHelper.HOURS_WORKED;
+import static com.example.bartek.log_work_android.DatabaseNamesHelper.SQL_CREATE_ENTRIES;
+import static com.example.bartek.log_work_android.DatabaseNamesHelper.SQL_DELETE_ENTRIES;
+import static com.example.bartek.log_work_android.DatabaseNamesHelper.SQL_SELECT_SUM_OF_WORKED_HOURS;
+import static com.example.bartek.log_work_android.DatabaseNamesHelper.SQL_SELECT_WORK_HISTORY;
+import static com.example.bartek.log_work_android.DatabaseNamesHelper.SQL_WHERE_CLAUSE;
+import static com.example.bartek.log_work_android.DatabaseNamesHelper.TABLE_NAME;
+
 public class DatabaseHelper extends SQLiteOpenHelper {
-    public static final String DATABASE_NAME = "work.db";
-    public static final int DATABASE_VERSION = 1;
-    public static final String SQL_WHERE_CLAUSE = "Id = ?";
-
-    private static final String ID = "Id";
-    private static final String DATE = "Date";
-    private static final String HOURS_WORKED = "Hours_worked";
-
-    private static final String TABLE_NAME = "Log_Work";
-    public static final String SQL_SELECT_SUM_OF_WORKED_HOURS = "SELECT SUM(" + HOURS_WORKED + ") FROM " + TABLE_NAME;
-    public static final String SQL_SELECT_WORK_HISTORY = "SELECT * FROM " + TABLE_NAME + " ORDER BY  " + ID + " DESC";
-    private static final String SQL_CREATE_ENTRIES = "CREATE TABLE "
-            + TABLE_NAME + "("
-            + ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
-            + DATE + " TEXT, "
-            + HOURS_WORKED + " REAL)";
-    private static final String SQL_DELETE_ENTRIES =
-            "DROP TABLE IF EXISTS " + TABLE_NAME;
 
     public DatabaseHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
