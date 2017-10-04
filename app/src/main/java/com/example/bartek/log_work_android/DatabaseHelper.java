@@ -11,6 +11,7 @@ import android.text.format.DateFormat;
 public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String DATABASE_NAME = "work.db";
     public static final int DATABASE_VERSION = 1;
+    public static final String SQL_WHERE_CLAUSE = "Id = ?";
 
     private static final String ID = "Id";
     private static final String DATE = "Date";
@@ -70,6 +71,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     public int delete(String buttonId) {
         SQLiteDatabase database = this.getWritableDatabase();
-        return database.delete(TABLE_NAME, "Id = ?", new String[]{buttonId});
+        return database.delete(TABLE_NAME, SQL_WHERE_CLAUSE, new String[]{buttonId});
     }
 }
