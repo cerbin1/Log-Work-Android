@@ -99,6 +99,7 @@ public class SecondActivity extends AppCompatActivity {
                     public void onClick(DialogInterface dialog, int id) {
                         resetTextViewsAndFields();
                         database.clearHistory();
+                        tableLayout.removeAllViews();
                         makeText(SecondActivity.this, "Deleted", LENGTH_SHORT).show();
                     }
                 })
