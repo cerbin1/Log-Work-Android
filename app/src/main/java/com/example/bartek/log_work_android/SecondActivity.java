@@ -63,7 +63,7 @@ public class SecondActivity extends AppCompatActivity {
         tableLayout.removeAllViews();
         while (data.moveToNext()) {
             String builder = data.getString(1) + " "
-                    + "{ " + data.getString(2) + " }";
+                    + "[ " + data.getString(2) + " ]";
             final int buttonId = Integer.parseInt(data.getString(0));
             final TableRow row = new TableRow(this);
             row.setBackgroundResource(R.drawable.border);
