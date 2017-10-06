@@ -6,7 +6,7 @@ import static junit.framework.Assert.assertFalse;
 import static junit.framework.Assert.assertTrue;
 import static utils.PatternValidator.isValid;
 
-public class PatternValidatorTest {
+public class RegexPatternValidatorTest {
 
     @Test
     public void testPatternValidator() {
