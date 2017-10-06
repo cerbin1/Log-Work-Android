@@ -79,6 +79,7 @@ public class SecondActivity extends AppCompatActivity {
                     int deletedRows = database.delete(Integer.toString(buttonId));
                     tableLayout.removeView(row);
                     Toast.makeText(SecondActivity.this, deletedRows > 0 ? "Data deleted" : "Data not deleted", Toast.LENGTH_SHORT).show();
+                    sumOfWorkedHoursTextView.setText(formatDouble(getSumOfWorkedHoursFromDatabase()));
                 }
             });
             button.setPadding(0, 0, 0, 0);
