@@ -5,6 +5,7 @@ import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TableLayout;
 import android.widget.TableRow;
@@ -56,11 +57,36 @@ public class SecondActivity extends AppCompatActivity {
 
     private void displayWorkHistory() {
         Cursor data = database.getWorkHistory();
+        tableLayout.removeAllViews();
         if (data.getCount() == 0) {
-            Toast.makeText(this, "No history work found", LENGTH_LONG).show();
+            workHistoryTextView.setText("Work history is empty");
             return;
         }
-        tableLayout.removeAllViews();
+        Button deleteAll = new Button(this);
+        deleteAll.setText("Delete all");
+        deleteAll.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Builder builder = new Builder(SecondActivity.this);
+                builder.setMessage("Are you sure you want to delete sum of worked hours?")
+                        .setCancelable(false)
+                        .setPositiveButton("Delete", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                resetTextViewsAndFields();
+                                database.clearHistory();
+                                tableLayout.removeAllViews();
+                                makeText(SecondActivity.this, "Deleted", LENGTH_SHORT).show();
+                            }
+                        })
+                        .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                dialog.cancel();
+                            }
+                        });
+                builder.create().show();
+            }
+        });
+        tableLayout.addView(deleteAll);
         while (data.moveToNext()) {
             String builder = data.getString(1) + " "
                     + "[ " + data.getString(2) + " ]";
@@ -80,6 +106,10 @@ public class SecondActivity extends AppCompatActivity {
                     tableLayout.removeView(row);
                     Toast.makeText(SecondActivity.this, deletedRows > 0 ? "Data deleted" : "Data not deleted", Toast.LENGTH_SHORT).show();
                     sumOfWorkedHoursTextView.setText(formatDouble(getSumOfWorkedHoursFromDatabase()));
+                    if (sumOfWorkedHoursTextView.getText().equals("0")) {
+                        tableLayout.removeAllViews();
+                        workHistoryTextView.setText("Work history is empty");
+                    }
                 }
             });
             button.setPadding(0, 0, 0, 0);
@@ -91,29 +121,9 @@ public class SecondActivity extends AppCompatActivity {
         }
     }
 
-    public void deleteSumOfWorkedHours(View view) {
-        Builder builder = new Builder(this);
-        builder.setMessage("Are you sure you want to delete sum of worked hours?")
-                .setCancelable(false)
-                .setPositiveButton("Delete", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        resetTextViewsAndFields();
-                        database.clearHistory();
-                        tableLayout.removeAllViews();
-                        makeText(SecondActivity.this, "Deleted", LENGTH_SHORT).show();
-                    }
-                })
-                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        dialog.cancel();
-                    }
-                });
-        builder.create().show();
-    }
-
     private void resetTextViewsAndFields() {
         sumOfWorkedHoursTextView.setText("0");
-        workHistoryTextView.setText("");
+        workHistoryTextView.setText("Work history is empty");
         sumOfWorkedHours = 0;
     }
 
