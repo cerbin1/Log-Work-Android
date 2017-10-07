@@ -14,7 +14,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import static android.app.AlertDialog.Builder;
-import static android.widget.Toast.LENGTH_LONG;
 import static android.widget.Toast.LENGTH_SHORT;
 import static android.widget.Toast.makeText;
 import static java.lang.Double.parseDouble;
@@ -23,8 +22,9 @@ import static utils.Formatter.formatDouble;
 public class SecondActivity extends AppCompatActivity {
     private static final double SALARY_PER_HOUR = 9.0;
 
-    private TextView sumOfWorkedHoursTextView;
     private TextView workHistoryTextView;
+    private TextView sumOfWorkedHoursTextView;
+    private TextView sumOfSalary;
     private double sumOfWorkedHours;
     private TableLayout tableLayout;
 
@@ -37,12 +37,16 @@ public class SecondActivity extends AppCompatActivity {
 
         database = new DatabaseHelper(this);
 
-        String sumOfWorkedHoursString = getSumOfWorkedHoursFromDatabase();
         sumOfWorkedHoursTextView = (TextView) findViewById(R.id.sumOfWorkedHours);
-        sumOfWorkedHoursTextView.setText(formatDouble(sumOfWorkedHoursString));
-        sumOfWorkedHours = parseDouble(sumOfWorkedHoursString);
+        sumOfSalary = (TextView) findViewById(R.id.sumOfSalary);
         workHistoryTextView = (TextView) findViewById(R.id.workHistory);
         tableLayout = (TableLayout) findViewById(R.id.tableLayout);
+
+        String sumOfWorkedHoursString = getSumOfWorkedHoursFromDatabase();
+        sumOfWorkedHours = parseDouble(sumOfWorkedHoursString);
+
+        sumOfWorkedHoursTextView.setText(formatDouble(sumOfWorkedHoursString));
+        sumOfSalary.setText(formatDouble(getSalaryAsString()));
         displayWorkHistory();
 
     }
@@ -99,14 +103,18 @@ public class SecondActivity extends AppCompatActivity {
             row.addView(textView);
             ImageButton button = new ImageButton(this);
             button.setImageResource(R.mipmap.image_clear);
+            final double workedHoursOfDeletedRecord = Double.parseDouble(data.getString(2));
             button.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+                    sumOfWorkedHours -= workedHoursOfDeletedRecord;
                     int deletedRows = database.delete(Integer.toString(buttonId));
                     tableLayout.removeView(row);
                     Toast.makeText(SecondActivity.this, deletedRows > 0 ? "Data deleted" : "Data not deleted", Toast.LENGTH_SHORT).show();
                     sumOfWorkedHoursTextView.setText(formatDouble(getSumOfWorkedHoursFromDatabase()));
+                    sumOfSalary.setText(formatDouble(getSalaryAsString()));
                     if (sumOfWorkedHoursTextView.getText().equals("0")) {
+                        sumOfSalary.setText("0");
                         tableLayout.removeAllViews();
                         workHistoryTextView.setText("Work history is empty");
                     }
@@ -123,12 +131,9 @@ public class SecondActivity extends AppCompatActivity {
 
     private void resetTextViewsAndFields() {
         sumOfWorkedHoursTextView.setText("0");
+        sumOfSalary.setText("0");
         workHistoryTextView.setText("Work history is empty");
         sumOfWorkedHours = 0;
-    }
-
-    public void displaySalary(View view) {
-        makeText(this, formatDouble(getSalaryAsString()), LENGTH_LONG).show();
     }
 
     private String getSalaryAsString() {
