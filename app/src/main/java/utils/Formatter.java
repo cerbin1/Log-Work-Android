@@ -16,6 +16,10 @@ public class Formatter {
         return new DecimalFormat("#.#").format(Double.parseDouble(string));
     }
 
+    public static String formatAsDouble(double number) {
+        return formatAsDouble(Double.toString(number));
+    }
+
     public static Toast getToastFormattedAsError(Context context, String string, int length) {
         @SuppressLint("ShowToast") Toast toast = makeText(context, string, length);
         toast.getView().setBackgroundColor(TRANSPARENT);
