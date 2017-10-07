@@ -73,7 +73,7 @@ public class SecondActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Builder builder = new Builder(SecondActivity.this);
                 builder.setMessage("Are you sure you want to delete sum of worked hours?")
-                        .setCancelable(false)
+                        .setCancelable(true)
                         .setPositiveButton("Delete", new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
                                 resetTextViewsAndFields();
