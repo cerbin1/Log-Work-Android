@@ -12,7 +12,7 @@ import static android.graphics.Color.TRANSPARENT;
 import static android.widget.Toast.makeText;
 
 public class Formatter {
-    public static String formatDouble(String string) {
+    public static String formatAsDouble(String string) {
         return new DecimalFormat("#.#").format(Double.parseDouble(string));
     }
 

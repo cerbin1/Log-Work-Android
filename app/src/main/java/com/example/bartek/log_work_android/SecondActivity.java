@@ -17,7 +17,7 @@ import static android.app.AlertDialog.Builder;
 import static android.widget.Toast.LENGTH_SHORT;
 import static android.widget.Toast.makeText;
 import static java.lang.Double.parseDouble;
-import static utils.Formatter.formatDouble;
+import static utils.Formatter.formatAsDouble;
 
 public class SecondActivity extends AppCompatActivity {
     private static final double SALARY_PER_HOUR = 9.0;
@@ -45,8 +45,8 @@ public class SecondActivity extends AppCompatActivity {
         String sumOfWorkedHoursString = getSumOfWorkedHoursFromDatabase();
         sumOfWorkedHours = parseDouble(sumOfWorkedHoursString);
 
-        sumOfWorkedHoursTextView.setText(formatDouble(sumOfWorkedHoursString));
-        sumOfSalary.setText(formatDouble(getSalaryAsString()));
+        sumOfWorkedHoursTextView.setText(formatAsDouble(sumOfWorkedHoursString));
+        sumOfSalary.setText(formatAsDouble(getSalaryAsString()));
         displayWorkHistory();
 
     }
@@ -111,8 +111,8 @@ public class SecondActivity extends AppCompatActivity {
                     int deletedRows = database.delete(Integer.toString(buttonId));
                     tableLayout.removeView(row);
                     Toast.makeText(SecondActivity.this, deletedRows > 0 ? "Data deleted" : "Data not deleted", Toast.LENGTH_SHORT).show();
-                    sumOfWorkedHoursTextView.setText(formatDouble(getSumOfWorkedHoursFromDatabase()));
-                    sumOfSalary.setText(formatDouble(getSalaryAsString()));
+                    sumOfWorkedHoursTextView.setText(formatAsDouble(getSumOfWorkedHoursFromDatabase()));
+                    sumOfSalary.setText(formatAsDouble(getSalaryAsString()));
                     if (sumOfWorkedHoursTextView.getText().equals("0")) {
                         sumOfSalary.setText("0");
                         tableLayout.removeAllViews();

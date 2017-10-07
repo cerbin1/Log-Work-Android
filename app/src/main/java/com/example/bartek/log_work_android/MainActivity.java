@@ -6,13 +6,13 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.EditText;
-import android.widget.Toast;
 
 import java.util.Calendar;
 
 import utils.RegexPatternValidator;
 
 import static android.widget.Toast.LENGTH_SHORT;
+import static android.widget.Toast.makeText;
 import static utils.Formatter.getToastFormattedAsError;
 
 public class MainActivity extends AppCompatActivity {
@@ -21,6 +21,7 @@ public class MainActivity extends AppCompatActivity {
     private DatabaseHelper database;
 
     private double hoursWorked;
+    private CheckBox customDateCheckBox;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,9 +29,10 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         database = new DatabaseHelper(this);
+        customDateCheckBox = ((CheckBox) findViewById(R.id.setDate));
     }
 
-    public void startSecondActivity(View view) {
+    public void startDisplayHistoryActivity(View view) {
         Intent intent = new Intent(this, SecondActivity.class);
         startActivity(intent);
     }
@@ -44,7 +46,7 @@ public class MainActivity extends AppCompatActivity {
                 startDatePickerActivity();
             } else {
                 boolean isInserted = database.insert(getCurrentDate(), hoursWorked);
-                Toast.makeText(MainActivity.this, isInserted ? "Saved" : "Data not saved", Toast.LENGTH_SHORT).show();
+                displayToast(isInserted);
             }
         } else {
             getToastFormattedAsError(this, "Wrong input!", LENGTH_SHORT).show();
@@ -52,7 +54,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private boolean isCustomDateSetChecked() {
-        return ((CheckBox) findViewById(R.id.setDate)).isChecked();
+        return customDateCheckBox.isChecked();
     }
 
     private void startDatePickerActivity() {
@@ -65,9 +67,14 @@ public class MainActivity extends AppCompatActivity {
         if (requestCode == DATE_PICKER_REQUEST_CODE) {
             if (resultCode == RESULT_OK) {
                 long dateInMillis = data.getLongExtra("Date", 0);
-                database.insert(dateInMillis, hoursWorked);
+                boolean isInserted = database.insert(dateInMillis, hoursWorked);
+                displayToast(isInserted);
             }
         }
+    }
+
+    private void displayToast(boolean isInserted) {
+        makeText(this, isInserted ? "Saved" : "Data not saved", LENGTH_SHORT).show();
     }
 
     public long getCurrentDate() {
