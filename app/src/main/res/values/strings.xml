@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">Log work</string>
+    <string name="work_history">Work history:</string>
+    <string name="salary">Salary</string>
+    <string name="worked_hours">Worked hours</string>
+    <string name="add_working_hours">Add working hours</string>
+    <string name="display_history">Display history</string>
+    <string name="set_date">Set date</string>
 </resources>
