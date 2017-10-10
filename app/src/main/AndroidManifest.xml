@@ -20,7 +20,7 @@
         <activity
             android:name=".SecondActivity"
             android:parentActivityName=".MainActivity"
-            tools:targetApi="jelly_bean">
+            tools:targetApi="lollipop">
 
         </activity>
     </application>
