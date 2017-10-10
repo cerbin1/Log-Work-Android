@@ -27,10 +27,6 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".MainActivity" />
         </activity>
-        <activity
-            android:name=".DatePickerActivity"
-            android:parentActivityName=".MainActivity"
-            tools:targetApi="jelly_bean"></activity>
     </application>
 
 </manifest>
