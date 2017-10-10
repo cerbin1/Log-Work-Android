@@ -1,10 +1,13 @@
 package com.example.bartek.log_work_android;
 
+import android.app.DatePickerDialog;
+import android.app.DialogFragment;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.CheckBox;
+import android.widget.DatePicker;
 import android.widget.EditText;
 
 import java.util.Calendar;
@@ -13,11 +16,12 @@ import utils.RegexPatternValidator;
 
 import static android.widget.Toast.LENGTH_SHORT;
 import static android.widget.Toast.makeText;
+import static java.util.Calendar.DAY_OF_MONTH;
+import static java.util.Calendar.MONTH;
+import static java.util.Calendar.YEAR;
 import static utils.Formatter.getToastFormattedAsError;
 
-public class MainActivity extends AppCompatActivity {
-    private static final int DATE_PICKER_REQUEST_CODE = 10;
-
+public class MainActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener {
     private DatabaseHelper database;
 
     private double hoursWorked;
@@ -58,19 +62,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void startDatePickerActivity() {
-        Intent intent = new Intent(this, DatePickerActivity.class);
-        startActivityForResult(intent, DATE_PICKER_REQUEST_CODE);
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == DATE_PICKER_REQUEST_CODE) {
-            if (resultCode == RESULT_OK) {
-                long dateInMillis = data.getLongExtra("Date", 0);
-                boolean isInserted = database.insert(dateInMillis, hoursWorked);
-                displayToast(isInserted);
-            }
-        }
+        DialogFragment newFragment = new DatePickerFragment();
+        newFragment.show(getFragmentManager(), "datePicker");
     }
 
     private void displayToast(boolean isInserted) {
@@ -79,5 +72,17 @@ public class MainActivity extends AppCompatActivity {
 
     public long getCurrentDate() {
         return Calendar.getInstance().getTimeInMillis();
+    }
+
+    @Override
+    public void onDateSet(DatePicker datePicker, int i, int i1, int i2) {
+        final Calendar calendar = Calendar.getInstance();
+        calendar.set(DAY_OF_MONTH, i2);
+        calendar.set(MONTH, i1);
+        calendar.set(YEAR, i);
+
+        long dateInMillis = calendar.getTimeInMillis();
+        boolean isInserted = database.insert(dateInMillis, hoursWorked);
+        displayToast(isInserted);
     }
 }
