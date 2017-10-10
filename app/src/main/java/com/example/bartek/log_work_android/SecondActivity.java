@@ -58,7 +58,7 @@ public class SecondActivity extends AppCompatActivity {
         if (data.moveToFirst()) {
             return Double.toString(data.getDouble(0));
         }
-        return "";
+        return "0";
     }
 
     private void updateSumOfWorkedHours() {
