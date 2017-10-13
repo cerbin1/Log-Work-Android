@@ -43,7 +43,7 @@ public class MainActivity extends AppCompatActivity implements DatePickerDialog.
 
     public void submitWorkedHours(View view) {
         String input = ((EditText) findViewById(R.id.workedHoursEditText)).getText().toString();
-        if (RegexPatternValidator.isValid(input)) {
+        if (RegexPatternValidator.isValid(input) && !input.equals("0")) {
             hoursWorked = Double.parseDouble(input);
 
             if (isCustomDateSetChecked()) {
