@@ -13,8 +13,17 @@ import static android.view.ViewGroup.LayoutParams.MATCH_PARENT;
 import static android.view.ViewGroup.LayoutParams.WRAP_CONTENT;
 
 public class Creator {
+    private final Context context;
 
-    public static ImageButton createDeleteRecordButton(Context context) {
+    private Creator() {
+        context = null;
+    }
+
+    public Creator(Context context) {
+        this.context = context;
+    }
+
+    public ImageButton createDeleteRecordButton() {
         ImageButton button = new ImageButton(context);
         button.setImageResource(R.mipmap.image_clear);
         button.setPadding(0, 0, 0, 0);
@@ -23,13 +32,13 @@ public class Creator {
         return button;
     }
 
-    public static Button createDeleteAllButton(Context context) {
+    public Button createDeleteAllButton() {
         Button deleteAllButton = new Button(context);
         deleteAllButton.setText("Delete all");
         return deleteAllButton;
     }
 
-    public static TextView createLogWorkTextView(Context context, String text) {
+    public TextView createLogWorkTextView(String text) {
         TextView textView = new TextView(context);
         textView.setTextSize(20);
         textView.setText(text);

@@ -13,12 +13,11 @@ import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 
+import com.example.bartek.log_work_android.ui.Creator;
+
 import static android.app.AlertDialog.Builder;
 import static android.widget.Toast.LENGTH_SHORT;
 import static android.widget.Toast.makeText;
-import static com.example.bartek.log_work_android.ui.Creator.createDeleteAllButton;
-import static com.example.bartek.log_work_android.ui.Creator.createDeleteRecordButton;
-import static com.example.bartek.log_work_android.ui.Creator.createLogWorkTextView;
 import static java.lang.Double.parseDouble;
 import static utils.Formatter.formatAsDouble;
 
@@ -34,6 +33,7 @@ public class SecondActivity extends AppCompatActivity {
     private double sumOfWorkedHours;
 
     private DatabaseHelper database;
+    private Creator ui;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,6 +41,7 @@ public class SecondActivity extends AppCompatActivity {
         setContentView(R.layout.second_activity);
 
         database = new DatabaseHelper(context);
+        ui = new Creator(this);
 
         tableLayout = (TableLayout) findViewById(R.id.tableLayout);
         workHistoryTextView = (TextView) findViewById(R.id.workHistory);
@@ -82,7 +83,7 @@ public class SecondActivity extends AppCompatActivity {
             workHistoryTextView.setText("Work history is empty");
             return;
         }
-        Button deleteAllButton = createDeleteAllButton(context);
+        Button deleteAllButton = ui.createDeleteAllButton();
         deleteAllButton.setOnClickListener(createDeleteAllListener());
         tableLayout.addView(deleteAllButton);
 
@@ -92,9 +93,9 @@ public class SecondActivity extends AppCompatActivity {
 
             final TableRow row = new TableRow(context);
             row.setBackgroundResource(R.drawable.border);
-            row.addView(createLogWorkTextView(context, logWork));
+            row.addView(ui.createLogWorkTextView(logWork));
 
-            ImageButton button = createDeleteRecordButton(context);
+            ImageButton button = ui.createDeleteRecordButton();
             button.setOnClickListener(createOnClickListener(row, data));
             row.addView(button);
 
