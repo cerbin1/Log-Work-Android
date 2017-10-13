@@ -5,6 +5,7 @@ import android.content.Context;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TableRow;
+import android.widget.TextView;
 
 import com.example.bartek.log_work_android.R;
 
@@ -26,5 +27,12 @@ public class Creator {
         Button deleteAllButton = new Button(context);
         deleteAllButton.setText("Delete all");
         return deleteAllButton;
+    }
+
+    public static TextView createLogWorkTextView(Context context, String text) {
+        TextView textView = new TextView(context);
+        textView.setTextSize(20);
+        textView.setText(text);
+        return textView;
     }
 }

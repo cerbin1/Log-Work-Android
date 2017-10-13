@@ -13,11 +13,12 @@ import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 
-import com.example.bartek.log_work_android.ui.Creator;
-
 import static android.app.AlertDialog.Builder;
 import static android.widget.Toast.LENGTH_SHORT;
 import static android.widget.Toast.makeText;
+import static com.example.bartek.log_work_android.ui.Creator.createDeleteAllButton;
+import static com.example.bartek.log_work_android.ui.Creator.createDeleteRecordButton;
+import static com.example.bartek.log_work_android.ui.Creator.createLogWorkTextView;
 import static java.lang.Double.parseDouble;
 import static utils.Formatter.formatAsDouble;
 
@@ -81,21 +82,22 @@ public class SecondActivity extends AppCompatActivity {
             workHistoryTextView.setText("Work history is empty");
             return;
         }
-        Button deleteAllButton = Creator.createDeleteAllButton(context);
+        Button deleteAllButton = createDeleteAllButton(context);
         deleteAllButton.setOnClickListener(createDeleteAllListener());
         tableLayout.addView(deleteAllButton);
+
         while (data.moveToNext()) {
-            String builder = data.getString(1) + " "
+            String logWork = data.getString(1) + " "
                     + "[ " + data.getString(2) + " ]";
+
             final TableRow row = new TableRow(context);
             row.setBackgroundResource(R.drawable.border);
-            TextView textView = new TextView(context);
-            textView.setTextSize(20);
-            textView.setText(builder);
-            row.addView(textView);
-            ImageButton button = Creator.createDeleteRecordButton(context);
+            row.addView(createLogWorkTextView(context, logWork));
+
+            ImageButton button = createDeleteRecordButton(context);
             button.setOnClickListener(createOnClickListener(row, data));
             row.addView(button);
+
             tableLayout.addView(row);
         }
     }
