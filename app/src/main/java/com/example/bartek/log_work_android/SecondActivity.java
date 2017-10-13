@@ -1,5 +1,6 @@
 package com.example.bartek.log_work_android;
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.database.Cursor;
 import android.os.Bundle;
@@ -22,6 +23,7 @@ import static utils.Formatter.formatAsDouble;
 
 public class SecondActivity extends AppCompatActivity {
     private static final double SALARY_PER_HOUR = 9.0;
+    private final Context context = SecondActivity.this;
 
     private TableLayout tableLayout;
     private TextView workHistoryTextView;
@@ -37,7 +39,7 @@ public class SecondActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.second_activity);
 
-        database = new DatabaseHelper(this);
+        database = new DatabaseHelper(context);
 
         tableLayout = (TableLayout) findViewById(R.id.tableLayout);
         workHistoryTextView = (TextView) findViewById(R.id.workHistory);
@@ -86,13 +88,13 @@ public class SecondActivity extends AppCompatActivity {
         while (data.moveToNext()) {
             String builder = data.getString(1) + " "
                     + "[ " + data.getString(2) + " ]";
-            final TableRow row = new TableRow(this);
+            final TableRow row = new TableRow(context);
             row.setBackgroundResource(R.drawable.border);
-            TextView textView = new TextView(this);
+            TextView textView = new TextView(context);
             textView.setTextSize(20);
             textView.setText(builder);
             row.addView(textView);
-            ImageButton button = Creator.createDeleteRecordButton(this);
+            ImageButton button = Creator.createDeleteRecordButton(context);
             button.setOnClickListener(createOnClickListener(row, data));
             row.addView(button);
             tableLayout.addView(row);
@@ -110,7 +112,7 @@ public class SecondActivity extends AppCompatActivity {
                 sumOfWorkedHours -= workedHoursOfDeletedRecord;
                 int deletedRows = database.delete(Integer.toString(buttonId));
                 tableLayout.removeView(row);
-                makeText(SecondActivity.this, deletedRows > 0 ? "Data deleted" : "Data not deleted", LENGTH_SHORT).show();
+                makeText(context, deletedRows > 0 ? "Data deleted" : "Data not deleted", LENGTH_SHORT).show();
                 updateSumOfWorkedHours();
                 updateSumOfSalary();
                 if (isEmptySumOfWorkedHours()) {
@@ -140,13 +142,13 @@ public class SecondActivity extends AppCompatActivity {
         return new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Builder builder = new Builder(SecondActivity.this);
+                Builder builder = new Builder(context);
                 builder.setMessage("Are you sure you want to delete sum of worked hours?")
                         .setCancelable(true)
                         .setPositiveButton("Delete", new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
                                 removeWholeWorkHistory();
-                                makeText(SecondActivity.this, "Deleted", LENGTH_SHORT).show();
+                                makeText(context, "Deleted", LENGTH_SHORT).show();
                             }
                         })
                         .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
