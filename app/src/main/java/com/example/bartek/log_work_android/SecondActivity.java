@@ -10,12 +10,11 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TableLayout;
 import android.widget.TableRow;
-import android.widget.TableRow.LayoutParams;
 import android.widget.TextView;
 
+import com.example.bartek.log_work_android.ui.Creator;
+
 import static android.app.AlertDialog.Builder;
-import static android.widget.TableRow.LayoutParams.MATCH_PARENT;
-import static android.widget.TableRow.LayoutParams.WRAP_CONTENT;
 import static android.widget.Toast.LENGTH_SHORT;
 import static android.widget.Toast.makeText;
 import static java.lang.Double.parseDouble;
@@ -93,33 +92,40 @@ public class SecondActivity extends AppCompatActivity {
             textView.setTextSize(20);
             textView.setText(builder);
             row.addView(textView);
-            ImageButton button = new ImageButton(this);
-            button.setImageResource(R.mipmap.image_clear);
-            final int buttonId = Integer.parseInt(data.getString(0));
-            final double workedHoursOfDeletedRecord = Double.parseDouble(data.getString(2));
-            button.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    sumOfWorkedHours -= workedHoursOfDeletedRecord;
-                    int deletedRows = database.delete(Integer.toString(buttonId));
-                    tableLayout.removeView(row);
-                    makeText(SecondActivity.this, deletedRows > 0 ? "Data deleted" : "Data not deleted", LENGTH_SHORT).show();
-                    updateSumOfWorkedHours();
-                    updateSumOfSalary();
-                    if (workedHoursTextView.getText().equals("Worked hours: 0")) {
-                        salaryTextView.setText("Salary: 0");
-                        resetTableLayout();
-                        workHistoryTextView.setText("Work history is empty");
-                    }
-                }
-            });
-            button.setPadding(0, 0, 0, 0);
-            button.setBackground(null);
-            button.setLayoutParams(new LayoutParams(WRAP_CONTENT, MATCH_PARENT));
+            ImageButton button = Creator.createDeleteRecordButton(this);
+            button.setOnClickListener(createOnClickListener(row, data));
             row.addView(button);
             tableLayout.addView(row);
         }
     }
+
+    @NonNull
+    private View.OnClickListener createOnClickListener(final TableRow row, Cursor data) {
+        final int buttonId = Integer.parseInt(data.getString(0));
+        final double workedHoursOfDeletedRecord = Double.parseDouble(data.getString(2));
+
+        return new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                sumOfWorkedHours -= workedHoursOfDeletedRecord;
+                int deletedRows = database.delete(Integer.toString(buttonId));
+                tableLayout.removeView(row);
+                makeText(SecondActivity.this, deletedRows > 0 ? "Data deleted" : "Data not deleted", LENGTH_SHORT).show();
+                updateSumOfWorkedHours();
+                updateSumOfSalary();
+                if (isEmptySumOfWorkedHours()) {
+                    salaryTextView.setText("Salary: 0");
+                    resetTableLayout();
+                    workHistoryTextView.setText("Work history is empty");
+                }
+            }
+
+            private boolean isEmptySumOfWorkedHours() {
+                return sumOfWorkedHours == 0;
+            }
+        };
+    }
+
 
     private void resetTableLayout() {
         tableLayout.removeAllViews();
