@@ -2,6 +2,7 @@ package com.example.bartek.log_work_android.ui;
 
 
 import android.content.Context;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TableRow;
 
@@ -19,5 +20,11 @@ public class Creator {
         button.setBackground(null);
         button.setLayoutParams(new TableRow.LayoutParams(WRAP_CONTENT, MATCH_PARENT));
         return button;
+    }
+
+    public static Button createDeleteAllButton(Context context) {
+        Button deleteAllButton = new Button(context);
+        deleteAllButton.setText("Delete all");
+        return deleteAllButton;
     }
 }

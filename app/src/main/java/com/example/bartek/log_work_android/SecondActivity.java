@@ -81,8 +81,7 @@ public class SecondActivity extends AppCompatActivity {
             workHistoryTextView.setText("Work history is empty");
             return;
         }
-        Button deleteAllButton = new Button(this);
-        deleteAllButton.setText("Delete all");
+        Button deleteAllButton = Creator.createDeleteAllButton(context);
         deleteAllButton.setOnClickListener(createDeleteAllListener());
         tableLayout.addView(deleteAllButton);
         while (data.moveToNext()) {
