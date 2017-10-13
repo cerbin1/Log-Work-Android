@@ -26,8 +26,8 @@ public class SecondActivity extends AppCompatActivity {
 
     private TableLayout tableLayout;
     private TextView workHistoryTextView;
-    private TextView sumOfWorkedHoursTextView;
-    private TextView sumOfSalary;
+    private TextView workedHoursTextView;
+    private TextView salaryTextView;
 
     private double sumOfWorkedHours;
 
@@ -42,8 +42,8 @@ public class SecondActivity extends AppCompatActivity {
 
         tableLayout = (TableLayout) findViewById(R.id.tableLayout);
         workHistoryTextView = (TextView) findViewById(R.id.workHistory);
-        sumOfWorkedHoursTextView = (TextView) findViewById(R.id.sumOfWorkedHours);
-        sumOfSalary = (TextView) findViewById(R.id.sumOfSalary);
+        workedHoursTextView = (TextView) findViewById(R.id.sumOfWorkedHours);
+        salaryTextView = (TextView) findViewById(R.id.sumOfSalary);
 
         sumOfWorkedHours = parseDouble(getSumOfWorkedHoursFromDatabase());
 
@@ -62,11 +62,11 @@ public class SecondActivity extends AppCompatActivity {
     }
 
     private void updateSumOfWorkedHours() {
-        sumOfWorkedHoursTextView.setText(formatAsDouble(sumOfWorkedHours));
+        workedHoursTextView.setText("Worked hours: " + formatAsDouble(sumOfWorkedHours));
     }
 
     private void updateSumOfSalary() {
-        sumOfSalary.setText(getFormattedSalary());
+        salaryTextView.setText("Salary: " + getFormattedSalary());
     }
 
     private String getFormattedSalary() {
@@ -106,8 +106,8 @@ public class SecondActivity extends AppCompatActivity {
                     makeText(SecondActivity.this, deletedRows > 0 ? "Data deleted" : "Data not deleted", LENGTH_SHORT).show();
                     updateSumOfWorkedHours();
                     updateSumOfSalary();
-                    if (sumOfWorkedHoursTextView.getText().equals("0")) {
-                        sumOfSalary.setText("0");
+                    if (workedHoursTextView.getText().equals("Worked hours: 0")) {
+                        salaryTextView.setText("Salary: 0");
                         resetTableLayout();
                         workHistoryTextView.setText("Work history is empty");
                     }
@@ -154,8 +154,8 @@ public class SecondActivity extends AppCompatActivity {
     }
 
     private void removeWholeWorkHistory() {
-        sumOfWorkedHoursTextView.setText("0");
-        sumOfSalary.setText("0");
+        workedHoursTextView.setText("Worked hours: 0");
+        salaryTextView.setText("Salary: 0");
         workHistoryTextView.setText("Work history is empty");
         sumOfWorkedHours = 0;
         database.clearHistory();
