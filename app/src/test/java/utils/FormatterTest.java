@@ -8,13 +8,13 @@ public class FormatterTest {
     @Test
     public void shouldFormatStringAsDouble() {
         // when
-        String string1 = Formatter.formatAsDouble("10");
-        String string2 = Formatter.formatAsDouble("0");
-        String string3 = Formatter.formatAsDouble("1.5");
-        String string4 = Formatter.formatAsDouble("12.0");
-        String string5 = Formatter.formatAsDouble("0.0");
-        String string6 = Formatter.formatAsDouble("12222222.0");
-        String string7 = Formatter.formatAsDouble("1243231.0");
+        String string1 = Formatter.formatDoubleAsString("10");
+        String string2 = Formatter.formatDoubleAsString("0");
+        String string3 = Formatter.formatDoubleAsString("1.5");
+        String string4 = Formatter.formatDoubleAsString("12.0");
+        String string5 = Formatter.formatDoubleAsString("0.0");
+        String string6 = Formatter.formatDoubleAsString("12222222.0");
+        String string7 = Formatter.formatDoubleAsString("1243231.0");
 
         // then
         assertEquals("10", string1);
@@ -28,13 +28,13 @@ public class FormatterTest {
 
     @Test
     public void shouldFormatDoubleAsDouble() {
-        String double1 = Formatter.formatAsDouble(10);
-        String double2 = Formatter.formatAsDouble(0);
-        String double3 = Formatter.formatAsDouble(1.5);
-        String double4 = Formatter.formatAsDouble(12.0);
-        String double5 = Formatter.formatAsDouble(0.0);
-        String double6 = Formatter.formatAsDouble(12222222.0);
-        String double7 = Formatter.formatAsDouble(1243231.0);
+        String double1 = Formatter.formatDoubleAsString(10);
+        String double2 = Formatter.formatDoubleAsString(0);
+        String double3 = Formatter.formatDoubleAsString(1.5);
+        String double4 = Formatter.formatDoubleAsString(12.0);
+        String double5 = Formatter.formatDoubleAsString(0.0);
+        String double6 = Formatter.formatDoubleAsString(12222222.0);
+        String double7 = Formatter.formatDoubleAsString(1243231.0);
 
         // then
         assertEquals("10", double1);

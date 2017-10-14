@@ -1,7 +1,7 @@
 package com.example.bartek.log_work_android;
 
 
-public class DatabaseNamesHelper {
+public class DatabaseNamesRepository {
     static final String DATABASE_NAME = "work.db";
     static final String TABLE_NAME = "Log_Work";
     static final int DATABASE_VERSION = 1;

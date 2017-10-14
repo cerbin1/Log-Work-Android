@@ -8,16 +8,16 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.text.format.DateFormat;
 
-import static com.example.bartek.log_work_android.DatabaseNamesHelper.DATABASE_NAME;
-import static com.example.bartek.log_work_android.DatabaseNamesHelper.DATABASE_VERSION;
-import static com.example.bartek.log_work_android.DatabaseNamesHelper.DATE;
-import static com.example.bartek.log_work_android.DatabaseNamesHelper.HOURS_WORKED;
-import static com.example.bartek.log_work_android.DatabaseNamesHelper.SQL_CREATE_ENTRIES;
-import static com.example.bartek.log_work_android.DatabaseNamesHelper.SQL_DELETE_ENTRIES;
-import static com.example.bartek.log_work_android.DatabaseNamesHelper.SQL_SELECT_SUM_OF_WORKED_HOURS;
-import static com.example.bartek.log_work_android.DatabaseNamesHelper.SQL_SELECT_WORK_HISTORY;
-import static com.example.bartek.log_work_android.DatabaseNamesHelper.SQL_WHERE_CLAUSE;
-import static com.example.bartek.log_work_android.DatabaseNamesHelper.TABLE_NAME;
+import static com.example.bartek.log_work_android.DatabaseNamesRepository.DATABASE_NAME;
+import static com.example.bartek.log_work_android.DatabaseNamesRepository.DATABASE_VERSION;
+import static com.example.bartek.log_work_android.DatabaseNamesRepository.DATE;
+import static com.example.bartek.log_work_android.DatabaseNamesRepository.HOURS_WORKED;
+import static com.example.bartek.log_work_android.DatabaseNamesRepository.SQL_CREATE_ENTRIES;
+import static com.example.bartek.log_work_android.DatabaseNamesRepository.SQL_DELETE_ENTRIES;
+import static com.example.bartek.log_work_android.DatabaseNamesRepository.SQL_SELECT_SUM_OF_WORKED_HOURS;
+import static com.example.bartek.log_work_android.DatabaseNamesRepository.SQL_SELECT_WORK_HISTORY;
+import static com.example.bartek.log_work_android.DatabaseNamesRepository.SQL_WHERE_CLAUSE;
+import static com.example.bartek.log_work_android.DatabaseNamesRepository.TABLE_NAME;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
 
