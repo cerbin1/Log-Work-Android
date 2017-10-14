@@ -4,6 +4,7 @@ import android.app.DatePickerDialog;
 import android.app.DialogFragment;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.CheckBox;
@@ -37,24 +38,41 @@ public class MainActivity extends AppCompatActivity implements DatePickerDialog.
     }
 
     public void startDisplayHistoryActivity(View view) {
-        Intent intent = new Intent(this, SecondActivity.class);
-        startActivity(intent);
+        startActivity(createSecondActivityIntent());
+    }
+
+    @NonNull
+    private Intent createSecondActivityIntent() {
+        return new Intent(this, SecondActivity.class);
     }
 
     public void submitWorkedHours(View view) {
-        String input = ((EditText) findViewById(R.id.workedHoursEditText)).getText().toString();
-        if (RegexPatternValidator.isValid(input) && !input.equals("0")) {
+        String input = getInput();
+        if (isValidInput(input)) {
             hoursWorked = Double.parseDouble(input);
 
             if (isCustomDateSetChecked()) {
                 startDatePickerActivity();
             } else {
                 boolean isInserted = database.insert(getCurrentDate(), hoursWorked);
-                displayToast(isInserted);
+                displayInsertResultToast(isInserted);
             }
         } else {
-            getToastFormattedAsError(this, "Wrong input!", LENGTH_SHORT).show();
+            displayErrorToast();
         }
+    }
+
+    private void displayErrorToast() {
+        getToastFormattedAsError(this, "Wrong input!").show();
+    }
+
+    private boolean isValidInput(String input) {
+        return RegexPatternValidator.isValid(input) && !input.equals("0");
+    }
+
+    @NonNull
+    private String getInput() {
+        return ((EditText) findViewById(R.id.workedHoursEditText)).getText().toString();
     }
 
     private boolean isCustomDateSetChecked() {
@@ -66,7 +84,7 @@ public class MainActivity extends AppCompatActivity implements DatePickerDialog.
         newFragment.show(getFragmentManager(), "datePicker");
     }
 
-    private void displayToast(boolean isInserted) {
+    private void displayInsertResultToast(boolean isInserted) {
         makeText(this, isInserted ? "Saved" : "Data not saved", LENGTH_SHORT).show();
     }
 
@@ -75,14 +93,14 @@ public class MainActivity extends AppCompatActivity implements DatePickerDialog.
     }
 
     @Override
-    public void onDateSet(DatePicker datePicker, int i, int i1, int i2) {
+    public void onDateSet(DatePicker datePicker, int year, int month, int day) {
         final Calendar calendar = Calendar.getInstance();
-        calendar.set(DAY_OF_MONTH, i2);
-        calendar.set(MONTH, i1);
-        calendar.set(YEAR, i);
+        calendar.set(DAY_OF_MONTH, day);
+        calendar.set(MONTH, month);
+        calendar.set(YEAR, year);
 
         long dateInMillis = calendar.getTimeInMillis();
         boolean isInserted = database.insert(dateInMillis, hoursWorked);
-        displayToast(isInserted);
+        displayInsertResultToast(isInserted);
     }
 }

@@ -15,11 +15,13 @@ import android.widget.TextView;
 
 import com.example.bartek.log_work_android.ui.Creator;
 
+import utils.Formatter;
+
 import static android.app.AlertDialog.Builder;
 import static android.widget.Toast.LENGTH_SHORT;
 import static android.widget.Toast.makeText;
 import static java.lang.Double.parseDouble;
-import static utils.Formatter.formatAsDouble;
+import static utils.Formatter.formatDoubleAsString;
 
 public class SecondActivity extends AppCompatActivity {
     private static final double SALARY_PER_HOUR = 9.0;
@@ -41,7 +43,7 @@ public class SecondActivity extends AppCompatActivity {
         setContentView(R.layout.second_activity);
 
         database = new DatabaseHelper(context);
-        ui = new Creator(this);
+        ui = new Creator(context);
 
         tableLayout = (TableLayout) findViewById(R.id.tableLayout);
         workHistoryTextView = (TextView) findViewById(R.id.workHistory);
@@ -65,15 +67,17 @@ public class SecondActivity extends AppCompatActivity {
     }
 
     private void updateSumOfWorkedHours() {
-        workedHoursTextView.setText("Worked hours: " + formatAsDouble(sumOfWorkedHours));
+        String text = "Worked hours: " + formatDoubleAsString(sumOfWorkedHours);
+        workedHoursTextView.setText(text);
     }
 
     private void updateSumOfSalary() {
-        salaryTextView.setText("Salary: " + getFormattedSalary());
+        String text = "Salary: " + getFormattedSalary();
+        salaryTextView.setText(text);
     }
 
     private String getFormattedSalary() {
-        return formatAsDouble(Double.toString((sumOfWorkedHours * SALARY_PER_HOUR)));
+        return Formatter.formatDoubleAsString(Double.toString((sumOfWorkedHours * SALARY_PER_HOUR)));
     }
 
     private void displayWorkHistory() {
@@ -112,13 +116,12 @@ public class SecondActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 sumOfWorkedHours -= workedHoursOfDeletedRecord;
-                int deletedRows = database.delete(Integer.toString(buttonId));
+                int deletedRows = database.delete("" + buttonId);
                 tableLayout.removeView(row);
                 makeText(context, deletedRows > 0 ? "Data deleted" : "Data not deleted", LENGTH_SHORT).show();
                 updateSumOfWorkedHours();
                 updateSumOfSalary();
                 if (isEmptySumOfWorkedHours()) {
-                    salaryTextView.setText("Salary: 0");
                     resetTableLayout();
                     workHistoryTextView.setText("Work history is empty");
                 }
@@ -129,7 +132,6 @@ public class SecondActivity extends AppCompatActivity {
             }
         };
     }
-
 
     private void resetTableLayout() {
         tableLayout.removeAllViews();
