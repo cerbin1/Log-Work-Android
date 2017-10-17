@@ -32,10 +32,10 @@ public class SecondActivity extends AppCompatActivity {
     private TextView workedHoursTextView;
     private TextView salaryTextView;
 
-    private double sumOfWorkedHours;
-
     private DatabaseHelper database;
     private Creator ui;
+
+    private WorkedHoursSumCounter sumOfWorkedHours;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,7 +50,7 @@ public class SecondActivity extends AppCompatActivity {
         workedHoursTextView = (TextView) findViewById(R.id.sumOfWorkedHours);
         salaryTextView = (TextView) findViewById(R.id.sumOfSalary);
 
-        sumOfWorkedHours = parseDouble(getSumOfWorkedHoursFromDatabase());
+        sumOfWorkedHours = new WorkedHoursSumCounter(parseDouble(getSumOfWorkedHoursFromDatabase()));
 
         updateSumOfWorkedHours();
         updateSumOfSalary();
@@ -67,7 +67,7 @@ public class SecondActivity extends AppCompatActivity {
     }
 
     private void updateSumOfWorkedHours() {
-        String text = "Worked hours: " + formatDoubleAsString(sumOfWorkedHours);
+        String text = "Worked hours: " + formatDoubleAsString(sumOfWorkedHours.get());
         workedHoursTextView.setText(text);
     }
 
@@ -77,7 +77,7 @@ public class SecondActivity extends AppCompatActivity {
     }
 
     private String getFormattedSalary() {
-        return Formatter.formatDoubleAsString(Double.toString((sumOfWorkedHours * SALARY_PER_HOUR)));
+        return Formatter.formatDoubleAsString(Double.toString((sumOfWorkedHours.get() * SALARY_PER_HOUR)));
     }
 
     private void displayWorkHistory() {
@@ -115,7 +115,7 @@ public class SecondActivity extends AppCompatActivity {
         return new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                sumOfWorkedHours -= workedHoursOfDeletedRecord;
+                sumOfWorkedHours.decreaseBy(workedHoursOfDeletedRecord);
                 int deletedRows = database.delete("" + buttonId);
                 tableLayout.removeView(row);
                 makeText(context, deletedRows > 0 ? "Data deleted" : "Data not deleted", LENGTH_SHORT).show();
@@ -128,7 +128,7 @@ public class SecondActivity extends AppCompatActivity {
             }
 
             private boolean isEmptySumOfWorkedHours() {
-                return sumOfWorkedHours == 0;
+                return sumOfWorkedHours.isEmpty();
             }
         };
     }
@@ -169,7 +169,7 @@ public class SecondActivity extends AppCompatActivity {
         workedHoursTextView.setText("Worked hours: 0");
         salaryTextView.setText("Salary: 0");
         workHistoryTextView.setText("Work history is empty");
-        sumOfWorkedHours = 0;
+        sumOfWorkedHours.empty();
         database.clearHistory();
         resetTableLayout();
     }
