@@ -20,7 +20,7 @@ public class WorkedHoursSumCounter {
     }
 
     public boolean isEmpty() {
-        return sum  != 0;
+        return sum  == 0;
     }
 
     public void empty() {
