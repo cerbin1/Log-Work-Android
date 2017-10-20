@@ -1,12 +1,18 @@
 package com.example.bartek.log_work_android;
 
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertFalse;
 import static junit.framework.Assert.assertTrue;
 
 public class WorkedHoursSumCounterTest {
+
+    @Rule
+    public ExpectedException expectedException = ExpectedException.none();
+
     @Test
     public void shouldInitializeSumCounterWithZero() {
         // when
@@ -53,7 +59,7 @@ public class WorkedHoursSumCounterTest {
         // given
         WorkedHoursSumCounter sumCounter = new WorkedHoursSumCounter(20);
         boolean isEmpty = sumCounter.isEmpty();
-        double sumCounterValue = sumCounter.get();
+        double sumCounterBeforeEmpty = sumCounter.get();
 
         // when
         sumCounter.empty();
@@ -61,7 +67,41 @@ public class WorkedHoursSumCounterTest {
         // then
         assertFalse(isEmpty);
         assertTrue(sumCounter.isEmpty());
-        assertEquals(20.0, sumCounterValue);
+        assertEquals(20.0, sumCounterBeforeEmpty);
         assertEquals(0.0, sumCounter.get());
+    }
+
+    @Test
+    public void shouldThrowExceptionOnNegativeSumAfterDecreasing() {
+        // given
+        WorkedHoursSumCounter sumCounter = new WorkedHoursSumCounter(20);
+
+        expectedException.expect(IllegalArgumentException.class);
+        expectedException.expectMessage("Sum of worked hours can not be negative!");
+
+        // when
+        sumCounter.decreaseBy(50);
+    }
+
+    @Test
+    public void shouldThrowExceptionOnInitializingWithNegativeSum() {
+        // given
+        expectedException.expect(IllegalArgumentException.class);
+        expectedException.expectMessage("Sum of worked hours can not be negative!");
+
+        // when
+        new WorkedHoursSumCounter(-5);
+    }
+
+    @Test
+    public void shouldThrowExceptionOnPassingNegativeWorkedHoursParameter() {
+        // given
+        WorkedHoursSumCounter sumCounter = new WorkedHoursSumCounter(20);
+
+        expectedException.expect(IllegalArgumentException.class);
+        expectedException.expectMessage("Worked hours can not be negative");
+
+        // when
+        sumCounter.decreaseBy(-10);
     }
 }

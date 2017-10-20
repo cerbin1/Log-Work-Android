@@ -8,6 +8,9 @@ public class WorkedHoursSumCounter {
     }
 
     public WorkedHoursSumCounter(double sum) {
+        if (sum < 0) {
+            throw new IllegalArgumentException("Sum of worked hours can not be negative!");
+        }
         this.sum = sum;
     }
 
@@ -16,11 +19,17 @@ public class WorkedHoursSumCounter {
     }
 
     public void decreaseBy(double workedHours) {
+        if (workedHours < 0) {
+            throw new IllegalArgumentException("Worked hours can not be negative");
+        }
         sum -= workedHours;
+        if (sum < 0) {
+            throw new IllegalArgumentException("Sum of worked hours can not be negative!");
+        }
     }
 
     public boolean isEmpty() {
-        return sum  == 0;
+        return sum == 0;
     }
 
     public void empty() {
